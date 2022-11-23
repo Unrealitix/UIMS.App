@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
+import 'package:unrealitix_ims/tabs.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -9,7 +11,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     final materialLightTheme = ThemeData(
@@ -55,43 +57,7 @@ class MyApp extends StatelessWidget {
         cupertino: (context, platform) => CupertinoAppData(
           theme: cupertinoTheme,
         ),
-        home: const PlatformPage(),
-      ),
-    );
-  }
-}
-
-class PlatformPage extends StatelessWidget {
-  const PlatformPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: const Text("Unrealitix Inventory Management System"),
-        trailingActions: [
-          PlatformIconButton(
-            materialIcon: const Icon(Icons.apple),
-            cupertinoIcon: const Icon(CupertinoIcons.rocket_fill),
-            onPressed: () {
-              PlatformProviderState? p = PlatformProvider.of(context);
-              if (p == null) return;
-              isMaterial(context)
-                  ? p.changeToCupertinoPlatform()
-                  : p.changeToMaterialPlatform();
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          Center(
-            child: Text(
-              "Center",
-              style: darkText(context),
-            ),
-          ),
-        ],
+        home: const TabManager(),
       ),
     );
   }
