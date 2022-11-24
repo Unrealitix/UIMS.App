@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../rest_client.dart';
 import '../tab_manager.dart';
 
 class Scan extends Tabby {
@@ -37,6 +38,12 @@ class _ScanState extends State<Scan> {
   //   controller.stop();
   // }
 
+  void _delayedResetLastScannedCode() async {
+    await Future.delayed(const Duration(seconds: 1), () {
+      lastScannedCode = "";
+    });
+  }
+
   _showExampleDialog(BuildContext context, String text) {
     isPopupCurrentlyOpen = true;
     showPlatformDialog(
@@ -53,13 +60,19 @@ class _ScanState extends State<Scan> {
               onPressed: () {
                 isPopupCurrentlyOpen = false;
                 Navigator.pop(context);
+                _delayedResetLastScannedCode();
               },
             ),
             PlatformDialogAction(
               child: PlatformText("OK"),
-              onPressed: () {
+              onPressed: () async {
                 isPopupCurrentlyOpen = false;
                 Navigator.pop(context);
+                _delayedResetLastScannedCode();
+
+                //TODO: Link to out own API
+                var resp = await RestClient().post("post", {"barcode": text});
+                print(resp);
               },
             ),
           ],
@@ -92,7 +105,7 @@ class _ScanState extends State<Scan> {
         //     print("button pressed!");
         //   },
         // )
-        //TODO: Remove the need for this bandaid button
+        //TODO: Remove the need for this band-aid button, using tab show/hide events
         Container(
           alignment: Alignment.topCenter,
           child: PlatformElevatedButton(
@@ -103,6 +116,22 @@ class _ScanState extends State<Scan> {
             },
           ),
         ),
+        // Container(
+        //   alignment: Alignment.center,
+        //   child: PlatformElevatedButton(
+        //     child: const Text("REST"),
+        //     onPressed: () async {
+        //       // RestClient().get("items/2");
+        //
+        //       // RestClient().get("cat?json=true");
+        //       // var resp = await RestClient().get("api/tags");
+        //
+        //       // var resp = await RestClient().post("post", "object");
+        //       var resp = await RestClient().get("get");
+        //       print(resp);
+        //     },
+        //   ),
+        // ),
       ],
     );
   }

@@ -6,3 +6,15 @@ TextStyle darkText(BuildContext context) {
           ? Colors.white
           : Colors.black);
 }
+
+List<String> splitStringByLength(String str, int length) {
+  int strLen = str.length;
+  List<String> chunks = [];
+
+  for (int i = 0; i < strLen; i += length) {
+    int end = (i + length < strLen) ? i + length : strLen;
+    chunks.add(str.substring(i, end));
+  }
+
+  return chunks;
+}
