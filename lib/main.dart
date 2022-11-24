@@ -2,7 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import 'package:unrealitix_ims/tabs.dart';
+import 'package:unrealitix_ims/tab_manager.dart';
+
+//TODO: Remove this, it's only for debugging
+//When changing this value, you have to completely rebuild the app
+const PlatformStyle _debugPlatformStyle = PlatformStyle.Material;
 
 void main() {
   runApp(const MyApp());
@@ -42,6 +46,10 @@ class MyApp extends StatelessWidget {
     );
 
     return PlatformProvider(
+      settings: PlatformSettingsData(
+        //TODO: Remove this, it's only for debugging
+        platformStyle: const PlatformStyleData(android: _debugPlatformStyle),
+      ),
       builder: (context) => PlatformApp(
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
@@ -61,11 +69,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}
-
-TextStyle darkText(BuildContext context) {
-  return TextStyle(
-      color: MediaQuery.of(context).platformBrightness == Brightness.dark
-          ? Colors.white
-          : Colors.black);
 }
