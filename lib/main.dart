@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
     const cupertinoTheme = CupertinoThemeData(
       primaryColor: CupertinoDynamicColor.withBrightness(
         color: CupertinoColors.systemBlue,
-        darkColor: CupertinoColors.systemRed,
+        darkColor: CupertinoColors.systemBlue,
       ),
     );
 
