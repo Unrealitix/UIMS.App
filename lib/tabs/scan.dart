@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:unrealitix_ims/utils.dart';
 
 import '../rest_client.dart';
 import '../tab_manager.dart';
@@ -45,7 +46,7 @@ class _ScanState extends State<Scan> {
     });
   }
 
-  _showExampleDialog(BuildContext context, String text) {
+  _showExampleDialog(BuildContext context, String text, BarcodeType type) {
     isPopupCurrentlyOpen = true;
     showPlatformDialog(
       context: context,
@@ -53,7 +54,7 @@ class _ScanState extends State<Scan> {
       builder: (BuildContext context) => WillPopScope(
         onWillPop: () async => false,
         child: PlatformAlertDialog(
-          title: const Text("Barcode"),
+          title: Text(type.name.toTitleCase()),
           content: Text(text),
           actions: <Widget>[
             PlatformDialogAction(
@@ -109,7 +110,11 @@ class _ScanState extends State<Scan> {
             print("scanned text: $text");
 
             lastScannedCode = text;
-            _showExampleDialog(context, text);
+            _showExampleDialog(
+              context,
+              text,
+              barcodesCapture.barcodes.first.type,
+            );
           },
         ),
         //TODO: Remove the need for this band-aid button, using tab show/hide events
