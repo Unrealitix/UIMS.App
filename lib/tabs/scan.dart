@@ -112,11 +112,6 @@ class _ScanState extends State<Scan> {
             _showExampleDialog(context, text);
           },
         ),
-        // PlatformElevatedButton(
-        //   onPressed: () {
-        //     print("button pressed!");
-        //   },
-        // )
         //TODO: Remove the need for this band-aid button, using tab show/hide events
         Container(
           alignment: Alignment.topCenter,
@@ -144,6 +139,27 @@ class _ScanState extends State<Scan> {
         //     },
         //   ),
         // ),
+        Padding(
+          padding: const EdgeInsets.all(32.0).add(
+            const EdgeInsets.only(bottom: 32),
+          ),
+          child: Container(
+            alignment: Alignment.bottomCenter,
+            child: FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  scannerController.toggleTorch();
+                });
+              },
+              child: Icon(
+                size: 42,
+                scannerController.torchState.value == TorchState.on
+                    ? Icons.flashlight_on
+                    : Icons.flashlight_off,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
