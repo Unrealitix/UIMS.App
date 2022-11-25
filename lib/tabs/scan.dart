@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -71,7 +72,18 @@ class _ScanState extends State<Scan> {
                 _delayedResetLastScannedCode();
 
                 //TODO: Link to out own API
-                var resp = await RestClient().post("post", {"barcode": text});
+                var resp = await RestClient().post(
+                  "post",
+                  {"barcode": text},
+                ).onError((Object? error, StackTrace stackTrace) {
+                  switch (error.runtimeType) {
+                    case SocketException:
+                      print("Couldn't connect");
+                      //TODO: Snackbar
+                      break;
+                  }
+                });
+                if (resp == null) return;
                 print(resp);
               },
             ),
@@ -94,7 +106,7 @@ class _ScanState extends State<Scan> {
             if (text == null) return;
             if (isPopupCurrentlyOpen) return;
             if (text == lastScannedCode) return;
-            print(text);
+            print("scanned text: $text");
 
             lastScannedCode = text;
             _showExampleDialog(context, text);

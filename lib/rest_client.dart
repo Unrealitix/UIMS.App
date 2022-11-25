@@ -24,7 +24,9 @@ class RestClient {
     return request;
   }
 
-  Future<dynamic> retGen(HttpClientResponse response) async {
+  Future<dynamic> retGen(HttpClientRequest request) async {
+    HttpClientResponse response = await request.close();
+
     int statusCode = response.statusCode;
     print("statusCode: $statusCode");
 
@@ -35,7 +37,7 @@ class RestClient {
       }
       return jsonDecode(responseBody);
     } else {
-      print("Error getting $response");
+      print("Error getting ${request.uri}");
       return null;
     }
   }
@@ -44,8 +46,7 @@ class RestClient {
   Future<dynamic> get(String api) async {
     HttpClientRequest request = await client.getUrl(urlGen(api));
     request = addHeaders(request);
-    HttpClientResponse response = await request.close();
-    return retGen(response);
+    return retGen(request);
   }
 
   // POST (send data)
@@ -53,8 +54,7 @@ class RestClient {
     HttpClientRequest request = await client.postUrl(urlGen(api));
     request = addHeaders(request);
     request.write(object);
-    HttpClientResponse response = await request.close();
-    return retGen(response);
+    return retGen(request);
   }
 
   // PUT (update data)
