@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:unrealitix_ims/rest_client.dart';
-import 'package:unrealitix_ims/utils.dart';
+
+import 'rest_client.dart';
+import 'utils.dart';
 
 class ManagedScannerWidget extends StatefulWidget {
   const ManagedScannerWidget({super.key});
@@ -20,6 +21,8 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
     detectionSpeed: DetectionSpeed.noDuplicates,
     onPermissionSet: (bool hasPermissions) {
       print("CameraComponent::onPermissionSet: $hasPermissions");
+      //TODO: This is being worked on and improved in the library.
+      // Waiting for the library to be updated.
     },
   );
   bool hasTorch = false;
