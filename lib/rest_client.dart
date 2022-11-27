@@ -1,6 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
-import 'utils.dart';
+
+import 'package:http/http.dart' as http;
+
+typedef Client = http.Client;
+typedef Request = http.Request;
+typedef Response = http.Response;
 
 class RestClient {
   //TODO: Link to our own api.
@@ -8,53 +12,42 @@ class RestClient {
   // String urlBase = "https://cataas.com";
   String urlBase = "https://httpbin.org";
 
-  HttpClient client = HttpClient();
+  Map<String, String> headers = {
+    HttpHeaders.contentTypeHeader: 'application/json',
+    HttpHeaders.acceptHeader: 'application/json',
+  };
+
+  Client client = Client();
 
   Uri urlGen(String api) {
     Uri apiUri = Uri.parse(api);
-    Uri url = Uri.parse("$urlBase/$apiUri?format=json");
+    Uri url = Uri.parse("$urlBase/$apiUri");
     // Uri url = Uri.parse("$urlBase/$apiUri");
     print("url: '$url'");
     return url;
   }
 
-  HttpClientRequest addHeaders(HttpClientRequest request) {
-    request.headers.add("Content-Type", "application/json");
-    request.headers.add("Accept", "application/json");
-    return request;
-  }
-
-  Future<dynamic> retGen(HttpClientRequest request) async {
-    HttpClientResponse response = await request.close();
-
-    int statusCode = response.statusCode;
-    print("statusCode: $statusCode");
-
-    if (statusCode == 200 || statusCode == 201) {
-      String responseBody = await response.transform(utf8.decoder).join();
-      for (String s in splitStringByLength(responseBody, 256)) {
-        print(s);
-      }
-      return jsonDecode(responseBody);
+  String returnResponse(Response response) {
+    String responseCode = response.statusCode.toString();
+    if (responseCode.startsWith("2")) {
+      return response.body;
     } else {
-      print("Error getting ${request.uri}");
-      return null;
+      throw HttpException(responseCode);
     }
   }
 
   // GET (receive data)
-  Future<dynamic> get(String api) async {
-    HttpClientRequest request = await client.getUrl(urlGen(api));
-    request = addHeaders(request);
-    return retGen(request);
+  Future<String> get(String api) async {
+    Uri url = urlGen(api);
+    Response response = await client.get(url, headers: headers);
+    return returnResponse(response);
   }
 
   // POST (send data)
   Future<dynamic> post(String api, dynamic object) async {
-    HttpClientRequest request = await client.postUrl(urlGen(api));
-    request = addHeaders(request);
-    request.write(object);
-    return retGen(request);
+    Uri url = urlGen(api);
+    Response response = await client.post(url, headers: headers, body: object);
+    return returnResponse(response);
   }
 
   // PUT (update data)

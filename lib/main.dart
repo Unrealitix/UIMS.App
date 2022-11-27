@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 
-import 'package:unrealitix_ims/tab_manager.dart';
+import 'tab_manager.dart';
 
 //TODO: Remove this, it's only for debugging
-//When changing this value, you have to completely rebuild the app
+// When changing this value, you have to stop and completely rebuild the app
 const PlatformStyle _debugPlatformStyle = PlatformStyle.Material;
 
 void main() {
@@ -50,21 +50,17 @@ class MyApp extends StatelessWidget {
         //TODO: Remove this, it's only for debugging
         platformStyle: const PlatformStyleData(android: _debugPlatformStyle),
       ),
-      builder: (context) => PlatformApp(
+      builder: (context) => PlatformSnackApp(
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,
           DefaultCupertinoLocalizations.delegate,
         ],
         title: "Unrealitix IMS",
-        material: (context, platform) => MaterialAppData(
-          theme: materialLightTheme,
-          darkTheme: materialDarkTheme,
-          themeMode: ThemeMode.system,
-        ),
-        cupertino: (context, platform) => CupertinoAppData(
-          theme: cupertinoTheme,
-        ),
+        materialTheme: materialLightTheme,
+        materialDarkTheme: materialDarkTheme,
+        materialThemeMode: ThemeMode.system,
+        cupertinoTheme: cupertinoTheme,
         home: const TabManager(),
       ),
     );

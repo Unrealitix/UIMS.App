@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 
-import 'package:unrealitix_ims/tabs/log.dart';
-import 'package:unrealitix_ims/tabs/scan.dart';
+import 'tabs/log.dart';
+import 'tabs/scan.dart';
 
 class TabManager extends StatefulWidget {
   const TabManager({super.key});
@@ -45,23 +45,11 @@ class _TabManagerState extends State<TabManager> {
   @override
   Widget build(BuildContext context) {
     return PlatformTabScaffold(
+      iosContentBottomPadding: true,
       iosContentPadding: true,
       tabController: tabController,
       appBarBuilder: (context, index) => PlatformAppBar(
         title: const Text("Unrealitix Inventory Management System"),
-        // trailingActions: [
-        //   PlatformIconButton(
-        //     materialIcon: const Icon(Icons.apple),
-        //     cupertinoIcon: const Icon(Icons.android),
-        //     onPressed: () {
-        //       PlatformProviderState? p = PlatformProvider.of(context);
-        //       if (p == null) return;
-        //       isMaterial(context)
-        //           ? p.changeToCupertinoPlatform()
-        //           : p.changeToMaterialPlatform();
-        //     },
-        //   ),
-        // ],
       ),
       bodyBuilder: (context, index) => IndexedStack(
         index: index,

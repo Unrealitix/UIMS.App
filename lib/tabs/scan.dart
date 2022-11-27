@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:unrealitix_ims/utils.dart';
 
-import '../rest_client.dart';
+import '../utils.dart';
 import '../tab_manager.dart';
+import '../rest_client.dart';
 
 class Scan extends Tabby {
   const Scan({super.key});
@@ -46,10 +46,10 @@ class _ScanState extends State<Scan> {
     });
   }
 
-  _showExampleDialog(BuildContext context, String text, BarcodeType type) {
+  _showExampleDialog(BuildContext mainContext, String text, BarcodeType type) {
     isPopupCurrentlyOpen = true;
     showPlatformDialog(
-      context: context,
+      context: mainContext,
       barrierDismissible: false,
       builder: (BuildContext context) => WillPopScope(
         onWillPop: () async => false,
@@ -73,25 +73,33 @@ class _ScanState extends State<Scan> {
                 _delayedResetLastScannedCode();
 
                 //TODO: Link to out own API
-                var resp = await RestClient().post(
-                  "post",
-                  {"barcode": text},
-                ).onError((Object? error, StackTrace stackTrace) {
-                  switch (error.runtimeType) {
-                    case SocketException:
-                      print("Couldn't connect");
-                      //TODO: Snackbar
-                      break;
-                  }
-                });
-                if (resp == null) return;
-                print(resp);
+                _restThings(text, mainContext);
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  _restThings(String text, BuildContext mainContext) async {
+    String resp = await RestClient().post("post", text).onError(
+      (HttpException error, StackTrace stackTrace) {
+        simpleSnackbar(mainContext, "Network error: ${error.message}",
+            icon: Icons.error);
+        return "";
+      },
+    ).onError((error, StackTrace stackTrace) {
+      if (error.runtimeType.toString() == "_ClientSocketException") {
+        simpleSnackbar(mainContext, "Not connected to the internet",
+            icon: Icons.error);
+      }
+      return "";
+    });
+    if (resp.isEmpty) {
+      simpleSnackbar(mainContext, "Server responded bad", icon: Icons.error);
+    }
+    print("resp: $resp");
   }
 
   @override
@@ -128,22 +136,6 @@ class _ScanState extends State<Scan> {
             },
           ),
         ),
-        // Container(
-        //   alignment: Alignment.center,
-        //   child: PlatformElevatedButton(
-        //     child: const Text("REST"),
-        //     onPressed: () async {
-        //       // RestClient().get("items/2");
-        //
-        //       // RestClient().get("cat?json=true");
-        //       // var resp = await RestClient().get("api/tags");
-        //
-        //       // var resp = await RestClient().post("post", "object");
-        //       var resp = await RestClient().get("get");
-        //       print(resp);
-        //     },
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.all(32.0).add(
             const EdgeInsets.only(bottom: 32),
