@@ -123,6 +123,7 @@ class _ScanState extends State<Scan> {
     print("Scan::build");
     return Stack(
       children: [
+        const Center(child: Text("Camera broken. Restart app to fix.")),
         if (scannerController != null)
           MobileScanner(
             controller: scannerController,
