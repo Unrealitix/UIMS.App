@@ -20,7 +20,7 @@ class _TabbedViewState extends State<TabbedView> {
     super.initState();
 
     tabController = PlatformTabController(
-      initialIndex: 1,
+      initialIndex: 1, //Note: Never start on the Scan tab.
     );
 
     Function? onShow;

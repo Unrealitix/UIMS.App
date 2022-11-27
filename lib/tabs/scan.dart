@@ -16,11 +16,7 @@ class Scan extends Tabby {
 }
 
 class _ScanState extends State<Scan> {
-  MobileScannerController scannerController = MobileScannerController(
-    torchEnabled: false,
-    facing: CameraFacing.back,
-    detectionSpeed: DetectionSpeed.noDuplicates,
-  );
+  MobileScannerController? scannerController;
 
   bool isPopupCurrentlyOpen = false;
   String lastScannedCode = "";
@@ -29,28 +25,32 @@ class _ScanState extends State<Scan> {
   void initState() {
     super.initState();
     print("Scan::initState");
-    scannerController.stop();
 
     widget.onShow = () {
       print("Scan::onShow");
       setState(() {
-        scannerController.start();
+        scannerController ??= MobileScannerController(
+          torchEnabled: false,
+          facing: CameraFacing.back,
+          detectionSpeed: DetectionSpeed.noDuplicates,
+        );
+        scannerController?.start();
       });
     };
     widget.onHide = () {
       print("Scan::onHide");
       setState(() {
-        if (scannerController.torchState.value == TorchState.on) {
-          scannerController.toggleTorch();
+        if (scannerController?.torchState.value == TorchState.on) {
+          scannerController?.toggleTorch();
         }
-        scannerController.stop();
+        scannerController?.stop();
       });
     };
   }
 
   @override
   void dispose() {
-    scannerController.dispose();
+    scannerController?.dispose();
 
     super.dispose();
   }
@@ -67,6 +67,7 @@ class _ScanState extends State<Scan> {
       context: mainContext,
       barrierDismissible: false,
       builder: (BuildContext context) => WillPopScope(
+        //prevents back button from closing dialog
         onWillPop: () async => false,
         child: PlatformAlertDialog(
           title: Text(type.name.toTitleCase()),
@@ -122,24 +123,25 @@ class _ScanState extends State<Scan> {
     print("Scan::build");
     return Stack(
       children: [
-        MobileScanner(
-          controller: scannerController,
-          fit: BoxFit.cover,
-          onDetect: (BarcodeCapture barcodesCapture) {
-            String? text = barcodesCapture.barcodes.first.rawValue;
-            if (text == null) return;
-            if (isPopupCurrentlyOpen) return;
-            if (text == lastScannedCode) return;
-            print("scanned text: $text");
+        if (scannerController != null)
+          MobileScanner(
+            controller: scannerController,
+            fit: BoxFit.cover,
+            onDetect: (BarcodeCapture barcodesCapture) {
+              String? text = barcodesCapture.barcodes.first.rawValue;
+              if (text == null) return;
+              if (isPopupCurrentlyOpen) return;
+              if (text == lastScannedCode) return;
+              print("scanned text: $text");
 
-            lastScannedCode = text;
-            _showExampleDialog(
-              context,
-              text,
-              barcodesCapture.barcodes.first.type,
-            );
-          },
-        ),
+              lastScannedCode = text;
+              _showExampleDialog(
+                context,
+                text,
+                barcodesCapture.barcodes.first.type,
+              );
+            },
+          ),
         Padding(
           padding: const EdgeInsets.all(32.0).add(
             const EdgeInsets.only(bottom: 32),
@@ -149,12 +151,12 @@ class _ScanState extends State<Scan> {
             child: FloatingActionButton(
               onPressed: () {
                 setState(() {
-                  scannerController.toggleTorch();
+                  scannerController?.toggleTorch();
                 });
               },
               child: Icon(
                 size: 42,
-                scannerController.torchState.value == TorchState.on
+                scannerController?.torchState.value == TorchState.on
                     ? Icons.flashlight_on_rounded
                     : Icons.flashlight_off_rounded,
               ),
