@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 
-import 'tab_manager.dart';
+import 'tabbed_view.dart';
 
 //TODO: Remove this, it's only for debugging
 // When changing this value, you have to stop and completely rebuild the app
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         materialDarkTheme: materialDarkTheme,
         materialThemeMode: ThemeMode.system,
         cupertinoTheme: cupertinoTheme,
-        home: const TabManager(),
+        home: const TabbedView(),
       ),
     );
   }

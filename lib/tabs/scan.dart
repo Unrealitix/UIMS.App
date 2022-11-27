@@ -5,7 +5,7 @@ import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../utils.dart';
-import '../tab_manager.dart';
+import '../tabbed_view.dart';
 import '../rest_client.dart';
 
 class Scan extends Tabby {
@@ -39,6 +39,13 @@ class _ScanState extends State<Scan> {
   // onHide() {
   //   controller.stop();
   // }
+
+  @override
+  void dispose() {
+    scannerController.dispose();
+
+    super.dispose();
+  }
 
   void _delayedResetLastScannedCode() async {
     await Future.delayed(const Duration(seconds: 1), () {
@@ -151,8 +158,8 @@ class _ScanState extends State<Scan> {
               child: Icon(
                 size: 42,
                 scannerController.torchState.value == TorchState.on
-                    ? Icons.flashlight_on
-                    : Icons.flashlight_off,
+                    ? Icons.flashlight_on_rounded
+                    : Icons.flashlight_off_rounded,
               ),
             ),
           ),

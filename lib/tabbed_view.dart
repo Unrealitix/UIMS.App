@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 
-import 'tabs/log.dart';
+import 'tabs/inventory.dart';
 import 'tabs/scan.dart';
 
-class TabManager extends StatefulWidget {
-  const TabManager({super.key});
+class TabbedView extends StatefulWidget {
+  const TabbedView({super.key});
 
   @override
-  State<TabManager> createState() => _TabManagerState();
+  State<TabbedView> createState() => _TabbedViewState();
 }
 
-class _TabManagerState extends State<TabManager> {
-  // This needs to be captured here in a stateful widget
+class _TabbedViewState extends State<TabbedView> {
   late PlatformTabController tabController;
   late List<Tabby> tabs;
 
@@ -20,26 +19,21 @@ class _TabManagerState extends State<TabManager> {
   void initState() {
     super.initState();
 
-    // If you want further control of the tabs have one of these
     tabController = PlatformTabController(
-      initialIndex: 0,
+      initialIndex: 1,
     );
 
     tabs = [
       const Scan(),
-      const Log(),
+      const Inventory(),
     ];
+  }
 
-    //TODO: Implement this
-    // tabController.addListener(() {
-    //   for (int i = 0; i < tabs.length; i++) {
-    //     if (i == tabController.index(context)) {
-    //       tabs[i].onShow.call();
-    //     } else {
-    //       tabs[i].onHide.call();
-    //     }
-    //   }
-    // });
+  @override
+  void dispose() {
+    tabController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -51,6 +45,17 @@ class _TabManagerState extends State<TabManager> {
       appBarBuilder: (context, index) => PlatformAppBar(
         title: const Text("Unrealitix Inventory Management System"),
       ),
+      itemChanged: (int index) {
+        print("Tab changed to $index");
+        //TODO: Implement this
+        // for (int i = 0; i < tabs.length; i++) {
+        //   if (i == tabController.index(context)) {
+        //     tabs[i].onShow.call();
+        //   } else {
+        //     tabs[i].onHide.call();
+        //   }
+        // }
+      },
       bodyBuilder: (context, index) => IndexedStack(
         index: index,
         children: tabs,
@@ -58,11 +63,15 @@ class _TabManagerState extends State<TabManager> {
       items: const [
         BottomNavigationBarItem(
           label: "Scan",
-          icon: Icon(Icons.camera_alt),
+          tooltip: "Scan new items into inventory",
+          icon: Icon(Icons.document_scanner),
+          activeIcon: Icon(Icons.document_scanner_rounded),
         ),
         BottomNavigationBarItem(
-          label: "Log",
+          label: "Inventory",
+          tooltip: "View inventory",
           icon: Icon(Icons.list),
+          activeIcon: Icon(Icons.list_rounded),
         ),
       ],
     );

@@ -1,16 +1,16 @@
 import 'package:flutter/widgets.dart';
 
 import '../utils.dart';
-import '../tab_manager.dart';
+import '../tabbed_view.dart';
 
-class Log extends Tabby {
-  const Log({super.key});
+class Inventory extends Tabby {
+  const Inventory({super.key});
 
   @override
-  State<Log> createState() => _LogState();
+  State<Inventory> createState() => _LogState();
 }
 
-class _LogState extends State<Log> {
+class _LogState extends State<Inventory> {
   late List<String> items;
 
   @override
