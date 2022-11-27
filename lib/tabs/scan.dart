@@ -9,7 +9,7 @@ import '../tabbed_view.dart';
 import '../rest_client.dart';
 
 class Scan extends Tabby {
-  const Scan({super.key});
+  Scan({super.key, super.onShow, super.onHide});
 
   @override
   State<Scan> createState() => _ScanState();
@@ -29,16 +29,24 @@ class _ScanState extends State<Scan> {
   void initState() {
     super.initState();
     print("Scan::initState");
-  }
+    scannerController.stop();
 
-  //TODO: Implement this
-  // onShow() {
-  //   controller.start();
-  // }
-  //
-  // onHide() {
-  //   controller.stop();
-  // }
+    widget.onShow = () {
+      print("Scan::onShow");
+      setState(() {
+        scannerController.start();
+      });
+    };
+    widget.onHide = () {
+      print("Scan::onHide");
+      setState(() {
+        if (scannerController.torchState.value == TorchState.on) {
+          scannerController.toggleTorch();
+        }
+        scannerController.stop();
+      });
+    };
+  }
 
   @override
   void dispose() {
@@ -131,17 +139,6 @@ class _ScanState extends State<Scan> {
               barcodesCapture.barcodes.first.type,
             );
           },
-        ),
-        //TODO: Remove the need for this band-aid button, using tab show/hide events
-        Container(
-          alignment: Alignment.topCenter,
-          child: PlatformElevatedButton(
-            child: const Text("Restart Camera"),
-            onPressed: () {
-              scannerController.stop();
-              scannerController.start();
-            },
-          ),
         ),
         Padding(
           padding: const EdgeInsets.all(32.0).add(

@@ -23,9 +23,12 @@ class _TabbedViewState extends State<TabbedView> {
       initialIndex: 1,
     );
 
+    Function? onShow;
+    Function? onHide;
+
     tabs = [
-      const Scan(),
-      const Inventory(),
+      Scan(onShow: onShow, onHide: onHide),
+      Inventory(onShow: onShow, onHide: onHide),
     ];
   }
 
@@ -47,14 +50,13 @@ class _TabbedViewState extends State<TabbedView> {
       ),
       itemChanged: (int index) {
         print("Tab changed to $index");
-        //TODO: Implement this
-        // for (int i = 0; i < tabs.length; i++) {
-        //   if (i == tabController.index(context)) {
-        //     tabs[i].onShow.call();
-        //   } else {
-        //     tabs[i].onHide.call();
-        //   }
-        // }
+        for (int i = 0; i < tabs.length; i++) {
+          if (i == tabController.index(context)) {
+            tabs[i].onShow?.call();
+          } else {
+            tabs[i].onHide?.call();
+          }
+        }
       },
       bodyBuilder: (context, index) => IndexedStack(
         index: index,
@@ -79,7 +81,10 @@ class _TabbedViewState extends State<TabbedView> {
 }
 
 class Tabby extends StatefulWidget {
-  const Tabby({super.key});
+  late Function? onShow;
+  late Function? onHide;
+
+  Tabby({super.key, this.onShow, this.onHide});
 
   @override
   State<StatefulWidget> createState() => TabbyState();

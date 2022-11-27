@@ -4,25 +4,33 @@ import '../utils.dart';
 import '../tabbed_view.dart';
 
 class Inventory extends Tabby {
-  const Inventory({super.key});
+  Inventory({super.key, super.onShow, super.onHide});
 
   @override
-  State<Inventory> createState() => _LogState();
+  State<Inventory> createState() => _InventoryState();
 }
 
-class _LogState extends State<Inventory> {
+class _InventoryState extends State<Inventory> {
   late List<String> items;
 
   @override
   void initState() {
     super.initState();
+    print("Inventory::initState");
+
+    widget.onShow = () {
+      print("Inventory::onShow");
+    };
+    widget.onHide = () {
+      print("Inventory::onHide");
+    };
 
     items = ["hello", "world"];
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Log::build");
+    print("Inventory::build");
     return ListView(
       children: [
         Text(
