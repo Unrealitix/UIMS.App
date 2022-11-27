@@ -27,7 +27,7 @@ jobs:
       with:
         java-version: '11'
         distribution: 'zulu'
-    - uses: subosito/flutter-action@v2
+    - uses: subosito/flutter-action@v2.8.0
       with:
         flutter-version: '3.3.8'
     - run: flutter pub get
