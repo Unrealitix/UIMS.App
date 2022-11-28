@@ -118,6 +118,7 @@ class _InventoryState extends State<Inventory> {
 
     await showPlatformDialog(
       context: ctx,
+      barrierDismissible: true,
       builder: (context) {
         return PlatformAlertDialog(
           title: const Text("Quantity"),
