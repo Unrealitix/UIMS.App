@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         primary: Colors.blue,
         secondary: Colors.lightBlueAccent,
       ),
+      dividerColor: Colors.white.withOpacity(0.4),
     );
 
     const cupertinoTheme = CupertinoThemeData(

@@ -1,10 +1,12 @@
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 
+//TODO: Reduce usage of this function with proper theming
 bool isDark(BuildContext context) {
   return MediaQuery.of(context).platformBrightness == Brightness.dark;
 }
 
+//TODO: Remove need for this function with proper theming
 TextStyle darkText(BuildContext context) {
   return TextStyle(
     color: isDark(context) ? Colors.white : Colors.black,
