@@ -57,8 +57,8 @@ class _InventoryState extends State<Inventory> {
                     });
                   },
                 ),
-                IconButton(
-                  icon: PlatformText(
+                PlatformTextButton(
+                  child: PlatformText(
                     itemQuantities[index].toString(),
                     style: darkText(context).copyWith(
                       fontSize: 20,
