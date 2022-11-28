@@ -42,8 +42,11 @@ class _TabbedViewState extends State<TabbedView> {
   @override
   Widget build(BuildContext context) {
     return PlatformTabScaffold(
+      //This messes up the top of the inventory list, adding too much padding,
+      // but its purpose is avoiding stuff being hidden behind the _top_ app bar
+      // iosContentPadding: true,
+      //This one can stay, to avoid stuff being hidden behind the _bottom_ bar
       iosContentBottomPadding: true,
-      iosContentPadding: true,
       tabController: tabController,
       appBarBuilder: (context, index) => PlatformAppBar(
         title: const Text("Unrealitix Inventory Management System"),
