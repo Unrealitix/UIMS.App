@@ -207,6 +207,10 @@ class _InventoryState extends State<Inventory> {
     TextEditingController controller = TextEditingController(
       text: ini,
     );
+    controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: ini.length,
+    );
 
     await showPlatformDialog(
       context: ctx,
