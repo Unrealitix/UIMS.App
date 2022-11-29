@@ -57,12 +57,11 @@ class _InventoryState extends State<Inventory> {
                     });
                   },
                 ),
-                PlatformTextButton(
-                  child: PlatformText(
-                    itemQuantities[index].toString(),
-                    style: darkText(context).copyWith(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                      color: (isDark(context) ? Colors.white : Colors.black)
+                          .withAlpha(64),
                     ),
                   ),
                   onPressed: () async {
@@ -80,6 +79,13 @@ class _InventoryState extends State<Inventory> {
                       itemQuantities[index] = i;
                     });
                   },
+                  child: PlatformText(
+                    itemQuantities[index].toString(),
+                    style: darkText(context).copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
