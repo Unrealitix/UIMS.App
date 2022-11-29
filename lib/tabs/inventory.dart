@@ -252,6 +252,9 @@ class _InventoryState extends State<Inventory> {
         );
       },
     );
+
+    if (result == null) return null;
+    if (result!.isEmpty) return "0";
     return result;
   }
 }
