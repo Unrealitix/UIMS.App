@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import 'models/inventory_item.dart';
 import 'rest_client.dart';
 import 'utils.dart';
 
@@ -37,7 +37,8 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Stack(
+  Widget build(BuildContext context) =>
+      Stack(
         children: [
           MobileScanner(
             controller: scannerController,
@@ -49,12 +50,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
               if (text == lastScannedCode) return;
               print("scanned text: $text");
 
-              lastScannedCode = text;
-              _showProductDialog(
-                context,
-                text,
-                barcodesCapture.barcodes.first.type,
-              );
+              _dialogNewScannedItem(context, text);
             },
             onStart: (MobileScannerArguments? arguments) {
               print("CameraComponent::onStart");
@@ -88,65 +84,51 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
         ],
       );
 
-  _showProductDialog(BuildContext mainContext, String text, BarcodeType type) {
+  _dialogNewScannedItem(BuildContext context, String text) async {
+    lastScannedCode = text;
     isPopupCurrentlyOpen = true;
-    showPlatformDialog(
-      context: mainContext,
-      barrierDismissible: false,
-      builder: (BuildContext context) => WillPopScope(
-        //prevents back button from closing dialog
-        onWillPop: () async => false,
-        child: PlatformAlertDialog(
-          title: Text(type.name.toTitleCase()),
-          content: Text(text),
-          actions: <Widget>[
-            PlatformDialogAction(
-              child: PlatformText("Cancel"),
-              onPressed: () {
-                isPopupCurrentlyOpen = false;
-                Navigator.pop(context);
-                _delayedResetLastScannedCode();
-              },
-            ),
-            PlatformDialogAction(
-              child: PlatformText("OK"),
-              onPressed: () async {
-                isPopupCurrentlyOpen = false;
-                Navigator.pop(context);
-                _delayedResetLastScannedCode();
 
-                //TODO: Link to out own API
-                _restThings(text, mainContext);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+    Item? item = await Item.dialogNewItem(context, barcode: text);
+
+    isPopupCurrentlyOpen = false;
+    _lastScannedCodeDelayedReset();
+
+    if (item == null) {
+      print("item was null");
+      return;
+    }
+    if (item.barcode == null) {
+      print("item barcode was null");
+      return;
+    }
+
+    //TODO: Link to out own API, and send whole item, instead of only barcode
+    _restThings(item.barcode!, context);
   }
 
-  void _delayedResetLastScannedCode() async {
+  void _lastScannedCodeDelayedReset() async {
     await Future.delayed(const Duration(seconds: 2), () {
       lastScannedCode = "";
     });
   }
 
-  _restThings(String text, BuildContext mainContext) async {
+  _restThings(String text, BuildContext snackbarContext) async {
     String resp = await RestClient().post("post", text).onError(
-      (HttpException error, StackTrace stackTrace) {
-        simpleSnackbar(mainContext, "Network error: ${error.message}",
+          (HttpException error, StackTrace stackTrace) {
+        simpleSnackbar(snackbarContext, "Network error: ${error.message}",
             icon: Icons.error);
         return "";
       },
     ).onError((error, StackTrace stackTrace) {
       if (error.runtimeType.toString() == "_ClientSocketException") {
-        simpleSnackbar(mainContext, "Not connected to the internet",
+        simpleSnackbar(snackbarContext, "Not connected to the internet",
             icon: Icons.error);
       }
       return "";
     });
     if (resp.isEmpty) {
-      simpleSnackbar(mainContext, "Server responded bad", icon: Icons.error);
+      simpleSnackbar(snackbarContext, "Server responded bad",
+          icon: Icons.error);
     }
     print("resp: $resp");
   }

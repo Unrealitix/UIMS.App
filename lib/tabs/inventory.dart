@@ -49,7 +49,7 @@ class _InventoryState extends State<Inventory> {
               return ListTile(
                 title: Text(items[index].name, style: darkText(context)),
                 subtitle:
-                    Text("SKU: ${items[index].sku}", style: darkText(context)),
+                Text("SKU: ${items[index].sku}", style: darkText(context)),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -130,7 +130,7 @@ class _InventoryState extends State<Inventory> {
             child: FloatingActionButton(
               tooltip: "Add item",
               onPressed: () async {
-                Item? ni = await _showAddItemDialog(context);
+                Item? ni = await Item.dialogNewItem(context);
                 if (ni == null) return;
                 setState(() {
                   items.add(ni);
@@ -145,75 +145,23 @@ class _InventoryState extends State<Inventory> {
   }
 
   Future<void> _refreshList() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1)); //TODO
   }
 
-  Future<Item?> _showAddItemDialog(BuildContext ctx) async {
-    String? name;
-    String? sku;
-    int quantity = 1;
-
-    await showPlatformDialog(
-      context: ctx,
-      builder: (ctx) {
-        return AlertDialog(
-          title: const Text("Add item"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: "Name",
-                ),
-                onChanged: (String s) {
-                  name = s;
-                },
-              ),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: "SKU",
-                ),
-                onChanged: (String s) {
-                  sku = s;
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: const Text("Add"),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (name == null || sku == null) return null;
-    return Item(name: name!, quantity: quantity, sku: sku!);
-  }
-
-  Future<String?> _showQuickQuantityDialog(BuildContext ctx, String ini) async {
+  Future<String?> _showQuickQuantityDialog(BuildContext context,
+      String initial,) async {
     String? result;
 
     TextEditingController controller = TextEditingController(
-      text: ini,
+      text: initial,
     );
     controller.selection = TextSelection(
       baseOffset: 0,
-      extentOffset: ini.length,
+      extentOffset: initial.length,
     );
 
     await showPlatformDialog(
-      context: ctx,
+      context: context,
       barrierDismissible: true,
       builder: (context) {
         return PlatformAlertDialog(
