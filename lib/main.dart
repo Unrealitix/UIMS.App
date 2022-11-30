@@ -20,29 +20,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final materialLightTheme = ThemeData(
       appBarTheme: const AppBarTheme(
-        color: Colors.blue,
+        color: Color(0xFFF0891F),
       ),
       colorScheme: const ColorScheme.light().copyWith(
-        primary: Colors.blue,
-        secondary: Colors.lightBlueAccent,
+        primary: const Color(0xFFF0891F),
+        secondary: const Color(0xFFF6AA4F),
       ),
     );
 
     final materialDarkTheme = ThemeData(
       appBarTheme: const AppBarTheme(
-        color: Colors.blue,
+        color: Color(0xFFF0891F),
       ),
       colorScheme: const ColorScheme.dark().copyWith(
-        primary: Colors.blue,
-        secondary: Colors.lightBlueAccent,
+        primary: const Color(0xFFF0891F),
+        secondary: const Color(0xFFF6AA4F),
       ),
       dividerColor: Colors.white.withOpacity(0.2),
     );
 
     const cupertinoTheme = CupertinoThemeData(
       primaryColor: CupertinoDynamicColor.withBrightness(
-        color: CupertinoColors.systemBlue,
-        darkColor: CupertinoColors.systemBlue,
+        color: Color(0xFFF0891F),
+        darkColor: Color(0xFFF0891F),
       ),
     );
 
