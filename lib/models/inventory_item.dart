@@ -17,7 +17,8 @@ class Item {
     this.description,
   });
 
-  static Future<Item?> dialogNewItem(BuildContext context, {
+  static Future<Item?> dialogNewItem(
+    BuildContext context, {
     String? barcode,
   }) async {
     String? name;
@@ -72,6 +73,11 @@ class Item {
             PlatformDialogAction(
               child: const Text("Add"),
               onPressed: () {
+                if (name == null || sku == null) {
+                  simpleSnackbar(context, "Item wasn't complete",
+                      icon: Icons.warning);
+                  return;
+                }
                 itemAccepted = true;
                 Navigator.of(context).pop();
               },
@@ -83,10 +89,6 @@ class Item {
 
     if (!itemAccepted) return null;
 
-    if (name == null || sku == null) {
-      simpleSnackbar(context, "Item wasn't complete", icon: Icons.warning);
-      return null;
-    }
     return Item(name: name!, quantity: quantity, sku: sku!, barcode: barcode);
   }
 }

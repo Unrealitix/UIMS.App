@@ -37,8 +37,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Stack(
+  Widget build(BuildContext context) => Stack(
         children: [
           MobileScanner(
             controller: scannerController,
@@ -114,7 +113,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
 
   _restThings(String text, BuildContext snackbarContext) async {
     String resp = await RestClient().post("post", text).onError(
-          (HttpException error, StackTrace stackTrace) {
+      (HttpException error, StackTrace stackTrace) {
         simpleSnackbar(snackbarContext, "Network error: ${error.message}",
             icon: Icons.error);
         return "";
