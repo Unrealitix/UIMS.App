@@ -218,24 +218,20 @@ class _InventoryState extends State<Inventory> {
       builder: (context) {
         return PlatformAlertDialog(
           title: const Text("Quantity"),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: controller,
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  hintText: "Quantity",
-                  labelText: "Enter the new quantity",
-                ),
-                onEditingComplete: () {
-                  Navigator.of(context).pop();
-                  result = controller.text;
-                },
-              ),
-            ],
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: "Quantity",
+              labelText: "Enter the new quantity",
+              counterText: "Previous quantity: $initial", //TODO: Maybe..
+            ),
+            style: darkText(context),
+            onEditingComplete: () {
+              Navigator.of(context).pop();
+              result = controller.text;
+            },
           ),
           actions: [
             PlatformDialogAction(
