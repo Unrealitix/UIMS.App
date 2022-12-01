@@ -1,9 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../rest_client.dart';
 import '../utils.dart';
 import '../tabbed_view.dart';
 import '../models/inventory_item.dart';
@@ -145,7 +148,32 @@ class _InventoryState extends State<Inventory> {
   }
 
   Future<void> _refreshList() async {
-    await Future.delayed(const Duration(seconds: 1)); //TODO
+    items.clear();
+    String resp = await RestClient().get("items").onError(
+      (HttpException error, StackTrace stackTrace) {
+        final SnackBar snackBar =
+            SnackBar(content: Text("Network error: ${error.message}"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+        return "network error";
+      },
+    ).onError((error, StackTrace stackTrace) {
+      if (error.runtimeType.toString() == "_ClientSocketException") {
+        const SnackBar snackBar =
+            SnackBar(content: Text("Not connected to the internet"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+      }
+      return "not connected to the internet";
+    });
+    if (resp.isEmpty) {
+      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    }
+
+    List<dynamic> json = jsonDecode(resp);
+
+    setState(() {
+      items = json.map((e) => Item.fromJson(e)).toList();
+    });
   }
 
   Future<int?> _showQuickQuantityDialog(

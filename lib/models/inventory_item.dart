@@ -31,6 +31,18 @@ class Item {
     "supplier": supplier,
   };
 
+  static Item fromJson(Map<String, dynamic> json) {
+
+    return Item(
+      sku: json["sku"] as String,
+      quantity: json["quantity"] as int,
+      name: json["name"] as String,
+      barcode: json["barcode"] as String?,
+      description: json["description"] as String?,
+      supplier: json["supplier"] as String?,
+    );
+  }
+
   static Future<Item?> dialogNewItem(
     BuildContext context, {
     String? barcode,
