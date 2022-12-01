@@ -84,8 +84,7 @@ class _InventoryState extends State<Inventory> {
                         if (s == null) return;
                         int? i = int.tryParse(s);
                         if (i == null || i < 0) {
-                          simpleSnackbar(context, "Invalid quantity",
-                              icon: Icons.error);
+                          //TODO: Notification inside EditText
                           return;
                         }
                         setState(() {

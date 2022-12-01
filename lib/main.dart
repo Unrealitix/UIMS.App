@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 
 import 'tabbed_view.dart';
+import 'utils.dart';
 
 //TODO: Remove this, it's only for debugging
 // When changing this value, you have to stop and completely rebuild the app

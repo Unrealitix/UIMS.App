@@ -102,7 +102,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
     }
 
     //TODO: Link to out own API, and send whole item, instead of only barcode
-    _restThings(item.barcode!, context);
+    _restThings(item.barcode!);
   }
 
   void _lastScannedCodeDelayedReset() async {
@@ -111,23 +111,25 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
     });
   }
 
-  _restThings(String text, BuildContext snackbarContext) async {
+  void _restThings(String text) async {
     String resp = await RestClient().post("post", text).onError(
       (HttpException error, StackTrace stackTrace) {
-        simpleSnackbar(snackbarContext, "Network error: ${error.message}",
-            icon: Icons.error);
-        return "";
+        final SnackBar snackBar =
+            SnackBar(content: Text("Network error: ${error.message}"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+        return "network error";
       },
     ).onError((error, StackTrace stackTrace) {
       if (error.runtimeType.toString() == "_ClientSocketException") {
-        simpleSnackbar(snackbarContext, "Not connected to the internet",
-            icon: Icons.error);
+        const SnackBar snackBar =
+            SnackBar(content: Text("Not connected to the internet"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
       }
-      return "";
+      return "not connected to the internet";
     });
     if (resp.isEmpty) {
-      simpleSnackbar(snackbarContext, "Server responded bad",
-          icon: Icons.error);
+      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
+      snackbarKey.currentState?.showSnackBar(snackBar);
     }
     print("resp: $resp");
   }

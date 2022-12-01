@@ -1,6 +1,5 @@
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:unrealitix_ims/utils.dart';
 
 class Item {
   String name;
@@ -74,8 +73,7 @@ class Item {
               child: const Text("Add"),
               onPressed: () {
                 if (name == null || sku == null) {
-                  simpleSnackbar(context, "Item wasn't complete",
-                      icon: Icons.warning);
+                  //TODO: make name & sku EditTexts error-red
                   return;
                 }
                 itemAccepted = true;
