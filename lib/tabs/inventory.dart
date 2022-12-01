@@ -78,15 +78,10 @@ class _InventoryState extends State<Inventory> {
                         ),
                       ),
                       onPressed: () async {
-                        String? s = await _showQuickQuantityDialog(
+                        int? i = await _showQuickQuantityDialog(
                             context, items[index].quantity.toString());
-                        print(s);
-                        if (s == null) return;
-                        int? i = int.tryParse(s);
-                        if (i == null || i < 0) {
-                          //TODO: Notification inside EditText
-                          return;
-                        }
+                        print(i);
+                        if (i == null) return; //Dialog cancelled
                         setState(() {
                           items[index].quantity = i;
                         });
@@ -153,11 +148,11 @@ class _InventoryState extends State<Inventory> {
     await Future.delayed(const Duration(seconds: 1)); //TODO
   }
 
-  Future<String?> _showQuickQuantityDialog(
+  Future<int?> _showQuickQuantityDialog(
     BuildContext context,
     String initial,
   ) async {
-    String? result;
+    int? result;
 
     TextEditingController controller = TextEditingController(
       text: initial,
@@ -166,50 +161,65 @@ class _InventoryState extends State<Inventory> {
       baseOffset: 0,
       extentOffset: initial.length,
     );
+    String? errorMessage;
+
+    void attemptChange(StateSetter setDialogState) {
+      if (controller.text.isEmpty) {
+        result = 0;
+        Navigator.of(context).pop();
+        return;
+      }
+      result = int.tryParse(controller.text);
+      setDialogState(() {
+        if (result == null || result! < 0) {
+          errorMessage = "Invalid quantity";
+        } else {
+          errorMessage = null;
+          Navigator.of(context).pop();
+        }
+      });
+    }
 
     await showPlatformDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
-        return PlatformAlertDialog(
-          title: const Text("Quantity"),
-          content: TextField(
-            controller: controller,
-            autofocus: true,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: "Quantity",
-              labelText: "Enter the new quantity",
-              counterText: "Previous quantity: $initial", //TODO: Maybe..
-            ),
-            style: darkText(context),
-            onEditingComplete: () {
-              Navigator.of(context).pop();
-              result = controller.text;
-            },
-          ),
-          actions: [
-            PlatformDialogAction(
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                result = null;
-              },
-            ),
-            PlatformDialogAction(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                result = controller.text;
-              },
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return PlatformAlertDialog(
+              title: const Text("Quantity"),
+              content: TextField(
+                controller: controller,
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "Quantity",
+                  labelText: "Enter the new quantity",
+                  counterText: "Previous quantity: $initial", //TODO: Maybe..
+                  errorText: errorMessage,
+                ),
+                style: darkText(context),
+                onEditingComplete: () => attemptChange(setDialogState),
+              ),
+              actions: [
+                PlatformDialogAction(
+                  child: const Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    result = null;
+                  },
+                ),
+                PlatformDialogAction(
+                  child: const Text("OK"),
+                  onPressed: () => attemptChange(setDialogState),
+                ),
+              ],
+            );
+          },
         );
       },
     );
 
-    if (result == null) return null;
-    if (result!.isEmpty) return "0";
     return result;
   }
 }
