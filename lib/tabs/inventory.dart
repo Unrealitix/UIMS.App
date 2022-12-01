@@ -148,24 +148,22 @@ class _InventoryState extends State<Inventory> {
   }
 
   Future<void> _refreshList() async {
-    // await Future.delayed(const Duration(seconds: 1)); //TODO
     items.clear();
     String resp = await RestClient().get("items").onError(
-        (HttpException error, StackTrace stackTrace) {
-          final SnackBar snackBar =
-              SnackBar(content: Text("Network error: ${error.message}"));
-          snackbarKey.currentState?.showSnackBar(snackBar);
-          return "network error";
-        }
+      (HttpException error, StackTrace stackTrace) {
+        final SnackBar snackBar =
+            SnackBar(content: Text("Network error: ${error.message}"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+        return "network error";
+      },
     ).onError((error, StackTrace stackTrace) {
       if (error.runtimeType.toString() == "_ClientSocketException") {
         const SnackBar snackBar =
-          SnackBar(content: Text("Not connected to the internet"));
+            SnackBar(content: Text("Not connected to the internet"));
         snackbarKey.currentState?.showSnackBar(snackBar);
       }
       return "not connected to the internet";
     });
-
     if (resp.isEmpty) {
       const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
       snackbarKey.currentState?.showSnackBar(snackBar);
@@ -173,9 +171,9 @@ class _InventoryState extends State<Inventory> {
 
     List<dynamic> json = jsonDecode(resp);
 
-    for (var item in json) {
-      items.add(Item.fromJson(item));
-    }
+    setState(() {
+      items = json.map((e) => Item.fromJson(e)).toList();
+    });
   }
 
   Future<int?> _showQuickQuantityDialog(
