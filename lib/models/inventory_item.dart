@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 
+import '../rest_client.dart';
+import '../utils.dart';
 import 'inventory_group.dart';
 
 class Item {
@@ -23,16 +28,15 @@ class Item {
   });
 
   Map toJson() => {
-    "sku": sku,
-    "quantity": quantity,
-    "name": name,
-    "barcode": barcode,
-    "description": description,
-    "supplier": supplier,
-  };
+        "sku": sku,
+        "quantity": quantity,
+        "name": name,
+        "barcode": barcode,
+        "description": description,
+        "supplier": supplier,
+      };
 
   static Item fromJson(Map<String, dynamic> json) {
-
     return Item(
       sku: json["sku"] as String,
       quantity: json["quantity"] as int,
@@ -115,5 +119,32 @@ class Item {
     if (!itemAccepted) return null;
 
     return Item(name: name!, quantity: quantity, sku: sku!, barcode: barcode);
+  }
+
+  static void sendItemToServer(Item item) async {
+    String resp = await RestClient().post("items", jsonEncode(item)).onError(
+      (HttpException error, StackTrace stackTrace) {
+        final SnackBar snackBar =
+            SnackBar(content: Text("Network error: ${error.message}"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+        //TODO: 409 is a conflict, not a network error
+        return "network error";
+      },
+    ).onError((error, StackTrace stackTrace) {
+      if (error.runtimeType.toString() == "_ClientSocketException") {
+        const SnackBar snackBar =
+            SnackBar(content: Text("Not connected to the internet"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+      }
+      return "not connected to the internet";
+    });
+    if (resp.isEmpty) {
+      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    }
+    print("resp: $resp");
+    const SnackBar snackBar =
+        SnackBar(content: Text("Successfully added item"));
+    snackbarKey.currentState?.showSnackBar(snackBar);
   }
 }

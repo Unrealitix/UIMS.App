@@ -137,6 +137,7 @@ class _InventoryState extends State<Inventory> {
                 if (ni == null) return;
                 setState(() {
                   items.add(ni);
+                  Item.sendItemToServer(ni);
                 });
               },
               child: const Icon(Icons.add),

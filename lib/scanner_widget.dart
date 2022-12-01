@@ -1,12 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'models/inventory_item.dart';
-import 'rest_client.dart';
-import 'utils.dart';
 
 class ManagedScannerWidget extends StatefulWidget {
   const ManagedScannerWidget({super.key});
@@ -102,36 +97,12 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
       return;
     }
 
-    //TODO: Link to out own API, and send whole item, instead of only barcode
-    _restThings(item);
+    Item.sendItemToServer(item);
   }
 
   void _lastScannedCodeDelayedReset() async {
     await Future.delayed(const Duration(seconds: 2), () {
       lastScannedCode = "";
     });
-  }
-
-  void _restThings(Item item) async {
-    String resp = await RestClient().post("items", jsonEncode(item)).onError(
-      (HttpException error, StackTrace stackTrace) {
-        final SnackBar snackBar =
-            SnackBar(content: Text("Network error: ${error.message}"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
-        return "network error";
-      },
-    ).onError((error, StackTrace stackTrace) {
-      if (error.runtimeType.toString() == "_ClientSocketException") {
-        const SnackBar snackBar =
-            SnackBar(content: Text("Not connected to the internet"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
-      }
-      return "not connected to the internet";
-    });
-    if (resp.isEmpty) {
-      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
-      snackbarKey.currentState?.showSnackBar(snackBar);
-    }
-    print("resp: $resp");
   }
 }
