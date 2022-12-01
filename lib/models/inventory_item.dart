@@ -1,20 +1,35 @@
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 
+import 'inventory_group.dart';
+
 class Item {
-  String name;
-  int quantity;
   String sku;
+  String name;
+  Group? group;
+  int quantity;
   String? barcode;
   String? description;
+  String? supplier;
 
   Item({
     required this.name,
     required this.quantity,
     required this.sku,
+    this.group,
     this.barcode,
     this.description,
+    this.supplier,
   });
+
+  Map toJson() => {
+    "sku": sku,
+    "quantity": quantity,
+    "name": name,
+    "barcode": barcode,
+    "description": description,
+    "supplier": supplier,
+  };
 
   static Future<Item?> dialogNewItem(
     BuildContext context, {
