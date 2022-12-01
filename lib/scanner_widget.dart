@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -102,7 +103,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
     }
 
     //TODO: Link to out own API, and send whole item, instead of only barcode
-    _restThings(item.barcode!);
+    _restThings(item);
   }
 
   void _lastScannedCodeDelayedReset() async {
@@ -111,8 +112,8 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
     });
   }
 
-  void _restThings(String text) async {
-    String resp = await RestClient().post("post", text).onError(
+  void _restThings(Item item) async {
+    String resp = await RestClient().post("items", jsonEncode(item)).onError(
       (HttpException error, StackTrace stackTrace) {
         final SnackBar snackBar =
             SnackBar(content: Text("Network error: ${error.message}"));

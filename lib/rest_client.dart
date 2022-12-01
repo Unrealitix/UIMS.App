@@ -10,7 +10,7 @@ class RestClient {
   //TODO: Link to our own api.
   // String urlBase = "http://127.0.0.1:8000/api";
   // String urlBase = "https://cataas.com";
-  String urlBase = "https://httpbin.org";
+  String urlBase = "https://vanir.mythicalsora.dev/api";
 
   Map<String, String> headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
