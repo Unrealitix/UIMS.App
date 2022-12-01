@@ -52,7 +52,11 @@ class _TabbedViewState extends State<TabbedView> {
       iosContentBottomPadding: true,
       tabController: tabController,
       appBarBuilder: (context, index) => PlatformAppBar(
-        title: const Text("Unrealitix Inventory Management System"),
+        leading: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Image.asset("assets/images/vanir_icon_fg1.png"),
+        ),
+        title: const Text("Vanir IMS"),
       ),
       itemChanged: (int index) {
         print("Tab changed to $index");

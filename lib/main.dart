@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
           DefaultWidgetsLocalizations.delegate,
           DefaultCupertinoLocalizations.delegate,
         ],
-        title: "Unrealitix IMS",
+        title: "Vanir IMS",
         materialTheme: materialLightTheme,
         materialDarkTheme: materialDarkTheme,
         materialThemeMode: ThemeMode.system,
