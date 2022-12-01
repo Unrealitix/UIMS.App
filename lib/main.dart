@@ -8,6 +8,10 @@ import 'tabbed_view.dart';
 // When changing this value, you have to stop and completely rebuild the app
 const PlatformStyle _debugPlatformStyle = PlatformStyle.Material;
 
+const Color mainColour = Color(0xFFFF8E00);
+const Color accentColour = Color(0xFFFFB04C);
+const Color blueColour = Color(0xFF58A6D8);
+
 void main() {
   runApp(const MyApp());
 }
@@ -18,31 +22,40 @@ class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
+    const bottomNavigationBarThemeData = BottomNavigationBarThemeData(
+      selectedItemColor: mainColour,
+      unselectedItemColor: accentColour,
+    );
+
     final materialLightTheme = ThemeData(
       appBarTheme: const AppBarTheme(
-        color: Color(0xFFF0891F),
+        color: mainColour,
       ),
+      bottomNavigationBarTheme: bottomNavigationBarThemeData,
       colorScheme: const ColorScheme.light().copyWith(
-        primary: const Color(0xFFF0891F),
-        secondary: const Color(0xFFF6AA4F),
+        primary: mainColour,
+        secondary: accentColour,
+        //FAB Icon Colour:
+        // onSecondary: Colors.red,
       ),
     );
 
     final materialDarkTheme = ThemeData(
       appBarTheme: const AppBarTheme(
-        color: Color(0xFFF0891F),
+        color: mainColour,
       ),
+      bottomNavigationBarTheme: bottomNavigationBarThemeData,
       colorScheme: const ColorScheme.dark().copyWith(
-        primary: const Color(0xFFF0891F),
-        secondary: const Color(0xFFF6AA4F),
+        primary: mainColour,
+        secondary: accentColour,
       ),
       dividerColor: Colors.white.withOpacity(0.2),
     );
 
     const cupertinoTheme = CupertinoThemeData(
       primaryColor: CupertinoDynamicColor.withBrightness(
-        color: Color(0xFFF0891F),
-        darkColor: Color(0xFFF0891F),
+        color: mainColour,
+        darkColor: mainColour,
       ),
     );
 
@@ -52,6 +65,7 @@ class MyApp extends StatelessWidget {
         platformStyle: const PlatformStyleData(android: _debugPlatformStyle),
       ),
       builder: (context) => PlatformSnackApp(
+        scaffoldMessengerKey: snackbarKey,
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,

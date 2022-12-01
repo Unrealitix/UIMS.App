@@ -41,6 +41,9 @@ class _TabbedViewState extends State<TabbedView> {
 
   @override
   Widget build(BuildContext context) {
+    const double selectedIconSize = 48;
+    //TODO: Animate between these two icon sizes.
+    const double unselectedIconSize = 24;
     return PlatformTabScaffold(
       //This messes up the top of the inventory list, adding too much padding,
       // but its purpose is avoiding stuff being hidden behind the _top_ app bar
@@ -65,18 +68,22 @@ class _TabbedViewState extends State<TabbedView> {
         index: index,
         children: tabs,
       ),
+      cupertinoTabs: (context, platform) => CupertinoTabBarData(
+        height: 72,
+      ),
       items: const [
         BottomNavigationBarItem(
           label: "Scan",
           tooltip: "Scan new items into inventory",
-          icon: Icon(Icons.document_scanner),
-          activeIcon: Icon(Icons.document_scanner_rounded),
+          icon: Icon(Icons.document_scanner, size: unselectedIconSize),
+          activeIcon:
+              Icon(Icons.document_scanner_rounded, size: selectedIconSize),
         ),
         BottomNavigationBarItem(
           label: "Inventory",
           tooltip: "View inventory",
-          icon: Icon(Icons.list),
-          activeIcon: Icon(Icons.list_rounded),
+          icon: Icon(Icons.list, size: unselectedIconSize),
+          activeIcon: Icon(Icons.list_rounded, size: selectedIconSize),
         ),
       ],
     );

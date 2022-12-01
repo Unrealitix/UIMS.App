@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../utils.dart';
@@ -46,15 +47,20 @@ class _InventoryState extends State<Inventory> {
           child: ListView.separated(
             itemBuilder: (context, index) {
               double iconSize = 20;
+              Color iconColor = isCupertino(context)
+                  ? CupertinoColors.systemBlue
+                  : isDark(context)
+                      ? Colors.white
+                      : Colors.black;
               return ListTile(
                 title: Text(items[index].name, style: darkText(context)),
                 subtitle:
-                Text("SKU: ${items[index].sku}", style: darkText(context)),
+                    Text("SKU: ${items[index].sku}", style: darkText(context)),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.remove),
+                      icon: Icon(Icons.remove, color: iconColor),
                       iconSize: iconSize,
                       color: isDark(context) ? Colors.white : Colors.black,
                       onPressed: () {
@@ -95,7 +101,7 @@ class _InventoryState extends State<Inventory> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.add),
+                      icon: Icon(Icons.add, color: iconColor),
                       iconSize: iconSize,
                       color: isDark(context) ? Colors.white : Colors.black,
                       onPressed: () {
@@ -148,8 +154,10 @@ class _InventoryState extends State<Inventory> {
     await Future.delayed(const Duration(seconds: 1)); //TODO
   }
 
-  Future<String?> _showQuickQuantityDialog(BuildContext context,
-      String initial,) async {
+  Future<String?> _showQuickQuantityDialog(
+    BuildContext context,
+    String initial,
+  ) async {
     String? result;
 
     TextEditingController controller = TextEditingController(
