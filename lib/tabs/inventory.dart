@@ -28,24 +28,29 @@ class _InventoryState extends State<Inventory> {
 
     widget.onShow = () {
       print("Inventory::onShow");
+      _refreshList();
     };
     widget.onHide = () {
       print("Inventory::onHide");
     };
 
     items = [
-      Item(name: "Bread", quantity: 1, sku: "no.1"),
-      Item(name: "Milk", quantity: 1, sku: "no.2"),
-      Item(name: "Eggs", quantity: 1, sku: "no.3"),
+      // Item(name: "Bread", quantity: 1, sku: "no.1"),
+      // Item(name: "Milk", quantity: 1, sku: "no.2"),
+      // Item(name: "Eggs", quantity: 1, sku: "no.3"),
     ];
+
+    _refreshList();
   }
 
   @override
   Widget build(BuildContext context) {
+    //TODO: Use FutureBuilder to show a loading indicator while waiting for the items to load
     print("Inventory::build");
     return Stack(
       children: [
         RefreshIndicator(
+          triggerMode: RefreshIndicatorTriggerMode.anywhere,
           onRefresh: _refreshList,
           child: ListView.separated(
             itemBuilder: (context, index) {
@@ -111,6 +116,7 @@ class _InventoryState extends State<Inventory> {
                 ),
                 onTap: () {
                   print("Tapped");
+                  _showItemDetails(context, items[index]);
                 },
               );
             },
@@ -137,7 +143,7 @@ class _InventoryState extends State<Inventory> {
                 if (ni == null) return;
                 setState(() {
                   items.add(ni);
-                  Item.sendItemToServer(ni);
+                  Item.sendNewItemToServer(ni);
                 });
               },
               child: const Icon(Icons.add),
@@ -250,5 +256,52 @@ class _InventoryState extends State<Inventory> {
     );
 
     return result;
+  }
+
+  void _showItemDetails(BuildContext context, Item item) {
+    showPlatformDialog(
+      context: context,
+      builder: (context) {
+        return PlatformAlertDialog(
+          title: Text(item.name),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("SKU: ${item.sku}"),
+              Text("Quantity: ${item.quantity}"),
+              if (item.barcode != null && item.barcode!.isNotEmpty)
+                Text("Barcode: ${item.barcode}"),
+              if (item.description != null && item.description!.isNotEmpty)
+                Text("Description: ${item.description}"),
+            ],
+          ),
+          actions: [
+            PlatformDialogActionButton(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(Icons.edit),
+                  Text(" Edit"),
+                ],
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Item? ni = await Item.dialogEditItem(context, item);
+                if (ni == null) return;
+                Item.changeItemOnServer(ni);
+                setState(() {
+                  items[items.indexOf(item)] = ni;
+                });
+              },
+            ),
+            PlatformDialogActionButton(
+              child: const Text("Close"),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -6,7 +6,6 @@ import 'tabbed_view.dart';
 import 'utils.dart';
 
 //TODO: Remove this, it's only for debugging
-// When changing this value, you have to stop and completely rebuild the app
 const PlatformStyle _debugPlatformStyle = PlatformStyle.Material;
 
 const Color mainColour = Color(0xFFFF8E00);

@@ -9,18 +9,18 @@ import '../utils.dart';
 import 'inventory_group.dart';
 
 class Item {
-  String sku;
   String name;
-  Group? group;
+  String sku;
   int quantity;
+  Group? group;
   String? barcode;
   String? description;
   String? supplier;
 
   Item({
     required this.name,
-    required this.quantity,
     required this.sku,
+    required this.quantity,
     this.group,
     this.barcode,
     this.description,
@@ -121,7 +121,77 @@ class Item {
     return Item(name: name!, quantity: quantity, sku: sku!, barcode: barcode);
   }
 
-  static void sendItemToServer(Item item) async {
+  static Future<Item?> dialogEditItem(context, item) async {
+    //TODO: Finish this and combine with dialogNewItem
+    // Currently it doesn't update to the api correctly
+    await showPlatformDialog(
+      context: context,
+      builder: (context) {
+        return PlatformAlertDialog(
+          title: const Text("Edit item"),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                initialValue: item.name,
+                decoration: const InputDecoration(
+                  labelText: "Name",
+                ),
+                onChanged: (String s) {
+                  item.name = s;
+                },
+              ),
+              TextFormField(
+                initialValue: item.sku,
+                decoration: const InputDecoration(
+                  labelText: "SKU",
+                ),
+                onChanged: (String s) {
+                  item.sku = s;
+                },
+              ),
+              TextFormField(
+                initialValue: item.barcode,
+                decoration: const InputDecoration(
+                  labelText: "Barcode",
+                ),
+                onChanged: (String s) {
+                  item.barcode = s;
+                },
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: PlatformTextButton(
+                  child: const Text("Delete Item"),
+                  onPressed: () async {
+                    Item.deleteItemFromServer(item);
+                  },
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            PlatformDialogAction(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            PlatformDialogAction(
+              child: const Text("Save"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+    return item;
+  }
+
+  static void sendNewItemToServer(Item item) async {
     String resp = await RestClient().post("items", jsonEncode(item)).onError(
       (HttpException error, StackTrace stackTrace) {
         final SnackBar snackBar =
@@ -145,6 +215,48 @@ class Item {
     print("resp: $resp");
     const SnackBar snackBar =
         SnackBar(content: Text("Successfully added item"));
+    snackbarKey.currentState?.showSnackBar(snackBar);
+  }
+
+  static void changeItemOnServer(Item item) async {
+    String resp = await RestClient()
+        .put("items/${item.sku}", jsonEncode(item))
+        .onError((error, StackTrace stackTrace) {
+      if (error.runtimeType.toString() == "_ClientSocketException") {
+        const SnackBar snackBar =
+            SnackBar(content: Text("Not connected to the internet"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+      }
+      return "not connected to the internet";
+    });
+    if (resp.isEmpty) {
+      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    }
+    print("resp: $resp");
+    const SnackBar snackBar =
+        SnackBar(content: Text("Successfully changed item"));
+    snackbarKey.currentState?.showSnackBar(snackBar);
+  }
+
+  static void deleteItemFromServer(Item item) async {
+    String resp = await RestClient()
+        .delete("items/${item.sku}")
+        .onError((error, StackTrace stackTrace) {
+      if (error.runtimeType.toString() == "_ClientSocketException") {
+        const SnackBar snackBar =
+            SnackBar(content: Text("Not connected to the internet"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+      }
+      return "not connected to the internet";
+    });
+    if (resp.isEmpty) {
+      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    }
+    print("resp: $resp");
+    const SnackBar snackBar =
+        SnackBar(content: Text("Successfully deleted item"));
     snackbarKey.currentState?.showSnackBar(snackBar);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../tabbed_view.dart';
-import '../scanner_widget.dart';
+import '../custom_widgets/scanner_widget.dart';
 
 class Scan extends Tabby {
   Scan({super.key, super.onShow, super.onHide});

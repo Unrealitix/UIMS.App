@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import 'models/inventory_item.dart';
+import '../models/inventory_item.dart';
 
 class ManagedScannerWidget extends StatefulWidget {
   const ManagedScannerWidget({super.key});
@@ -97,7 +97,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
       return;
     }
 
-    Item.sendItemToServer(item);
+    Item.sendNewItemToServer(item);
   }
 
   void _lastScannedCodeDelayedReset() async {

@@ -48,8 +48,16 @@ class RestClient {
   }
 
   // PUT (update data)
-  Future<dynamic> put(String api) async {}
+  Future<dynamic> put(String api, dynamic object) async {
+    Uri url = urlGen(api);
+    Response response = await client.put(url, headers: headers, body: object);
+    return returnResponse(response);
+  }
 
   // DELETE (delete data)
-  Future<dynamic> delete(String api) async {}
+  Future<dynamic> delete(String api) async {
+    Uri url = urlGen(api);
+    Response response = await client.delete(url, headers: headers);
+    return returnResponse(response);
+  }
 }
