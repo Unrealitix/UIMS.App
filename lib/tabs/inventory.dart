@@ -1,12 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../rest_client.dart';
 import '../utils.dart';
 import '../tabbed_view.dart';
 import '../models/inventory_item.dart';
@@ -73,8 +70,8 @@ class _InventoryState extends State<Inventory> {
                       color: isDark(context) ? Colors.white : Colors.black,
                       onPressed: () {
                         setState(() {
-                          items[index].quantity =
-                              max(0, items[index].quantity - 1);
+                          items[index].changeQuantityTo(
+                              max(0, items[index].quantity - 1));
                         });
                       },
                     ),
@@ -91,7 +88,7 @@ class _InventoryState extends State<Inventory> {
                         print(i);
                         if (i == null) return; //Dialog cancelled
                         setState(() {
-                          items[index].quantity = i;
+                          items[index].changeQuantityTo(i);
                         });
                       },
                       child: PlatformText(
@@ -108,7 +105,8 @@ class _InventoryState extends State<Inventory> {
                       color: isDark(context) ? Colors.white : Colors.black,
                       onPressed: () {
                         setState(() {
-                          items[index].quantity = items[index].quantity + 1;
+                          items[index]
+                              .changeQuantityTo(items[index].quantity + 1);
                         });
                       },
                     ),
@@ -155,31 +153,9 @@ class _InventoryState extends State<Inventory> {
   }
 
   Future<void> _refreshList() async {
-    items.clear();
-    String resp = await RestClient().get("items").onError(
-      (HttpException error, StackTrace stackTrace) {
-        final SnackBar snackBar =
-            SnackBar(content: Text("Network error: ${error.message}"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
-        return "network error";
-      },
-    ).onError((error, StackTrace stackTrace) {
-      if (error.runtimeType.toString() == "_ClientSocketException") {
-        const SnackBar snackBar =
-            SnackBar(content: Text("Not connected to the internet"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
-      }
-      return "not connected to the internet";
-    });
-    if (resp.isEmpty) {
-      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
-      snackbarKey.currentState?.showSnackBar(snackBar);
-    }
-
-    List<dynamic> json = jsonDecode(resp);
-
+    List<Item> newItems = await Item.getItemsFromServer();
     setState(() {
-      items = json.map((e) => Item.fromJson(e)).toList();
+      items = newItems;
     });
   }
 

@@ -27,6 +27,11 @@ class Item {
     this.supplier,
   });
 
+  void changeQuantityTo(int newQuantity) {
+    quantity = newQuantity;
+    changeItemOnServer(this);
+  }
+
   Map toJson() => {
         "sku": sku,
         "quantity": quantity,
@@ -191,6 +196,34 @@ class Item {
     return item;
   }
 
+  //rest: get
+  static Future<List<Item>> getItemsFromServer() async {
+    String resp = await RestClient().get("items").onError(
+      (HttpException error, StackTrace stackTrace) {
+        final SnackBar snackBar =
+            SnackBar(content: Text("Network error: ${error.message}"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+        return "network error";
+      },
+    ).onError((error, StackTrace stackTrace) {
+      if (error.runtimeType.toString() == "_ClientSocketException") {
+        const SnackBar snackBar =
+            SnackBar(content: Text("Not connected to the internet"));
+        snackbarKey.currentState?.showSnackBar(snackBar);
+      }
+      return "not connected to the internet";
+    });
+    if (resp.isEmpty) {
+      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
+      snackbarKey.currentState?.showSnackBar(snackBar);
+    }
+
+    List<dynamic> json = jsonDecode(resp);
+
+    return json.map((e) => Item.fromJson(e)).toList();
+  }
+
+  //rest: post
   static void sendNewItemToServer(Item item) async {
     String resp = await RestClient().post("items", jsonEncode(item)).onError(
       (HttpException error, StackTrace stackTrace) {
@@ -218,6 +251,7 @@ class Item {
     snackbarKey.currentState?.showSnackBar(snackBar);
   }
 
+  //rest: put
   static void changeItemOnServer(Item item) async {
     String resp = await RestClient()
         .put("items/${item.sku}", jsonEncode(item))
@@ -239,6 +273,7 @@ class Item {
     snackbarKey.currentState?.showSnackBar(snackBar);
   }
 
+  //rest: delete
   static void deleteItemFromServer(Item item) async {
     String resp = await RestClient()
         .delete("items/${item.sku}")
