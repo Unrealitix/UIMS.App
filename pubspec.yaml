@@ -39,6 +39,7 @@ dependencies:
   enough_platform_widgets: ^0.5.0
   mobile_scanner: ^3.0.0-beta.2
   http: ^0.13.4
+  audioplayers: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -80,8 +81,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/vanir_icon_fg1.png
     - assets/images/vanir_icon_2_fg6.png
+    - assets/sounds/Scan_new_item.mp3
+    - assets/sounds/Scan_existing_item.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

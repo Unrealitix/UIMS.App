@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -26,9 +27,22 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
   bool isPopupCurrentlyOpen = false;
   String lastScannedCode = "";
 
+  final AudioPlayer player = AudioPlayer();
+  final Source newBeep = AssetSource("sounds/Scan_new_item.mp3");
+  final Source existingBeep = AssetSource("sounds/Scan_existing_item.mp3");
+
+  @override
+  void initState() {
+    super.initState();
+    player.setPlayerMode(PlayerMode.lowLatency);
+    player.setReleaseMode(ReleaseMode.stop);
+  }
+
   @override
   void dispose() {
     scannerController.dispose();
+    player.dispose();
+
     super.dispose();
   }
 
@@ -44,6 +58,10 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
               if (isPopupCurrentlyOpen) return;
               if (text == lastScannedCode) return;
               print("scanned text: $text");
+
+              player.play(newBeep);
+              //TODO: Implement existing item detection
+              // player.play(existingBeep);
 
               _dialogNewScannedItem(context, text);
             },
