@@ -57,25 +57,33 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
             },
           ),
           if (hasTorch)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 64),
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    setState(() {
-                      scannerController.toggleTorch();
-                    });
-                  },
-                  child: Icon(
-                    size: 42,
-                    scannerController.torchState.value == TorchState.on
-                        ? Icons.flashlight_on_rounded
-                        : Icons.flashlight_off_rounded,
-                  ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    scannerController.toggleTorch();
+                  });
+                },
+                icon: Icon(
+                  size: 32,
+                  color: Colors.white,
+                  shadows: const [
+                    Shadow(
+                      color: Colors.black,
+                      blurRadius: 20,
+                    ),
+                  ],
+                  scannerController.torchState.value == TorchState.on
+                      ? Icons.flashlight_on_rounded
+                      : Icons.flashlight_off_rounded,
                 ),
               ),
             ),
+          const Align(
+            alignment: Alignment.bottomCenter,
+            child: Chip(label: Text("Hover over a barcode to scan it")),
+          ),
         ],
       );
 
