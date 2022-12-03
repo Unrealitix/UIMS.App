@@ -34,7 +34,6 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
   @override
   void initState() {
     super.initState();
-    player.setPlayerMode(PlayerMode.lowLatency);
     player.setReleaseMode(ReleaseMode.stop);
   }
 
