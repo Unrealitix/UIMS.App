@@ -53,13 +53,16 @@ class _TabbedViewState extends State<TabbedView> {
       tabController: tabController,
       appBarBuilder: (context, index) => PlatformAppBar(
         title: Row(
-          children: [
-            Image.asset(
-              "assets/images/vanir_icon_2_fg6.png",
+          children: const [
+            Image(
               fit: BoxFit.cover,
               height: 52,
+              image: ResizeImage(
+                AssetImage("assets/images/vanir_icon_2_fg6.png"),
+                width: 52,
+              ),
             ),
-            const Text("Vanir IMS"),
+            Text("Vanir IMS"),
           ],
         ),
       ),
