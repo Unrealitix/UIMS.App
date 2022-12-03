@@ -52,11 +52,6 @@ class _TabbedViewState extends State<TabbedView> {
       iosContentBottomPadding: true,
       tabController: tabController,
       appBarBuilder: (context, index) => PlatformAppBar(
-        //TODO: Decide between these two icons:
-        leading: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Image.asset("assets/images/vanir_icon_fg1.png"),
-        ),
         title: Row(
           children: [
             Image.asset(
