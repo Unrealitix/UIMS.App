@@ -200,22 +200,17 @@ class Item {
   static Future<List<Item>> getItemsFromServer() async {
     String resp = await RestClient().get("items").onError(
       (HttpException error, StackTrace stackTrace) {
-        final SnackBar snackBar =
-            SnackBar(content: Text("Network error: ${error.message}"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
+        showSnackbar("Network error: ${error.message}");
         return "network error";
       },
     ).onError((error, StackTrace stackTrace) {
       if (error.runtimeType.toString() == "_ClientSocketException") {
-        const SnackBar snackBar =
-            SnackBar(content: Text("Not connected to the internet"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
+        showSnackbar("Not connected to the internet");
       }
       return "not connected to the internet";
     });
     if (resp.isEmpty) {
-      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
-      snackbarKey.currentState?.showSnackBar(snackBar);
+      showSnackbar("Server responded bad");
     }
 
     List<dynamic> json = jsonDecode(resp);
@@ -227,71 +222,63 @@ class Item {
   static void sendNewItemToServer(Item item) async {
     String resp = await RestClient().post("items", jsonEncode(item)).onError(
       (HttpException error, StackTrace stackTrace) {
-        final SnackBar snackBar =
-            SnackBar(content: Text("Network error: ${error.message}"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
+        showSnackbar("Network error: ${error.message}");
         //TODO: 409 is a conflict, not a network error
         return "network error";
       },
     ).onError((error, StackTrace stackTrace) {
       if (error.runtimeType.toString() == "_ClientSocketException") {
-        const SnackBar snackBar =
-            SnackBar(content: Text("Not connected to the internet"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
+        showSnackbar("Not connected to the internet");
       }
       return "not connected to the internet";
     });
     if (resp.isEmpty) {
-      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
-      snackbarKey.currentState?.showSnackBar(snackBar);
+      showSnackbar("Server responded bad");
     }
     print("resp: $resp");
-    const SnackBar snackBar =
-        SnackBar(content: Text("Successfully added item"));
-    snackbarKey.currentState?.showSnackBar(snackBar);
+    showSnackbar("Successfully added item");
   }
 
   //rest: put
   static void changeItemOnServer(Item item) async {
-    String resp = await RestClient()
-        .put("items/${item.sku}", jsonEncode(item))
-        .onError((error, StackTrace stackTrace) {
+    String resp =
+        await RestClient().put("items/${item.sku}", jsonEncode(item)).onError(
+      (HttpException error, StackTrace stackTrace) {
+        showSnackbar("Network error: ${error.message}");
+        return "network error";
+      },
+    ).onError((error, StackTrace stackTrace) {
       if (error.runtimeType.toString() == "_ClientSocketException") {
-        const SnackBar snackBar =
-            SnackBar(content: Text("Not connected to the internet"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
+        showSnackbar("Not connected to the internet");
       }
       return "not connected to the internet";
     });
-    if (resp.isEmpty) {
-      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
-      snackbarKey.currentState?.showSnackBar(snackBar);
-    }
+    //Put requests apparently return empty responses on success,
+    // so no need to show an error here
+    /*if (resp.isEmpty) {
+      // showSnackbar("Server responded bad");
+    }*/
     print("resp: $resp");
-    const SnackBar snackBar =
-        SnackBar(content: Text("Successfully changed item"));
-    snackbarKey.currentState?.showSnackBar(snackBar);
+    showSnackbar("Successfully changed item");
   }
 
   //rest: delete
   static void deleteItemFromServer(Item item) async {
-    String resp = await RestClient()
-        .delete("items/${item.sku}")
-        .onError((error, StackTrace stackTrace) {
+    String resp = await RestClient().delete("items/${item.sku}").onError(
+      (HttpException error, StackTrace stackTrace) {
+        showSnackbar("Network error: ${error.message}");
+        return "network error";
+      },
+    ).onError((error, StackTrace stackTrace) {
       if (error.runtimeType.toString() == "_ClientSocketException") {
-        const SnackBar snackBar =
-            SnackBar(content: Text("Not connected to the internet"));
-        snackbarKey.currentState?.showSnackBar(snackBar);
+        showSnackbar("Not connected to the internet");
       }
       return "not connected to the internet";
     });
     if (resp.isEmpty) {
-      const SnackBar snackBar = SnackBar(content: Text("Server responded bad"));
-      snackbarKey.currentState?.showSnackBar(snackBar);
+      showSnackbar("Server responded bad");
     }
     print("resp: $resp");
-    const SnackBar snackBar =
-        SnackBar(content: Text("Successfully deleted item"));
-    snackbarKey.currentState?.showSnackBar(snackBar);
+    showSnackbar("Successfully deleted item");
   }
 }

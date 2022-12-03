@@ -15,6 +15,12 @@ TextStyle darkText(BuildContext context) {
   );
 }
 
+void showSnackbar(String message) {
+  snackbarKey.currentState?.showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
+
 List<String> splitStringByLength(String str, int length) {
   int strLen = str.length;
   List<String> chunks = [];
