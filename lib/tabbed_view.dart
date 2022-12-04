@@ -41,7 +41,7 @@ class _TabbedViewState extends State<TabbedView> {
 
   @override
   Widget build(BuildContext context) {
-    const double selectedIconSize = 48;
+    const double selectedIconSize = 32;
     //TODO: Animate between these two icon sizes.
     const double unselectedIconSize = 24;
     return PlatformTabScaffold(
@@ -94,8 +94,8 @@ class _TabbedViewState extends State<TabbedView> {
         BottomNavigationBarItem(
           label: "Inventory",
           tooltip: "View inventory",
-          icon: Icon(Icons.list, size: unselectedIconSize),
-          activeIcon: Icon(Icons.list_rounded, size: selectedIconSize),
+          icon: Icon(Icons.list_alt, size: unselectedIconSize),
+          activeIcon: Icon(Icons.list_alt_rounded, size: selectedIconSize),
         ),
       ],
     );

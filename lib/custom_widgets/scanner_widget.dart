@@ -87,9 +87,9 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
                 case _ScannerMode.newItem:
                   player.play(newBeep);
                   //TODO: Implement existing item detection:
-                  // if(item is already in inventory) {
+                  // if(item i is already in inventory) {
                   //   player.play(existingBeep);
-                  //   dialogEditItem(item);
+                  //   dialogEditItem(i);
                   //   return;
                   // }
 
@@ -119,29 +119,46 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
               });
             },
           ),
-          if (hasTorch)
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: IconButton(
-                tooltip: "Toggle flashlight",
-                onPressed: () => setState(() {
-                  scannerController.toggleTorch();
-                }),
-                icon: Icon(
-                  size: 32,
-                  color: Colors.white,
-                  shadows: const [
-                    Shadow(
-                      color: Colors.black,
-                      blurRadius: 20,
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: IconTheme(
+              data: const IconThemeData(
+                color: Colors.white,
+                size: 32,
+                shadows: [
+                  Shadow(
+                    color: Colors.black,
+                    blurRadius: 20,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  //TODO: if has multiple cameras
+                  IconButton(
+                    tooltip: "Switch camera",
+                    onPressed: () {
+                      scannerController.switchCamera();
+                    },
+                    icon: const Icon(Icons.cameraswitch),
+                  ),
+                  if (hasTorch)
+                    IconButton(
+                      tooltip: "Toggle flashlight",
+                      onPressed: () => setState(() {
+                        scannerController.toggleTorch();
+                      }),
+                      icon: Icon(
+                        scannerController.torchState.value == TorchState.on
+                            ? Icons.flashlight_on_rounded
+                            : Icons.flashlight_off_rounded,
+                      ),
                     ),
-                  ],
-                  scannerController.torchState.value == TorchState.on
-                      ? Icons.flashlight_on_rounded
-                      : Icons.flashlight_off_rounded,
-                ),
+                ],
               ),
             ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Chip(label: Text(_scannerModeString)),
@@ -151,8 +168,8 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
             child: Align(
               alignment: Alignment.bottomRight,
               child: SpeedDial(
-                tooltip: "Add item",
-                icon: Icons.party_mode,
+                tooltip: "Switch scan mode",
+                icon: Icons.party_mode, //TODO: Find a better icon for this
                 activeIcon: Icons.close,
                 children: [
                   SpeedDialChild(

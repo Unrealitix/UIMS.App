@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const bottomNavigationBarThemeData = BottomNavigationBarThemeData(
       selectedItemColor: mainColour,
-      unselectedItemColor: accentColour,
+      // unselectedItemColor: accentColour,
     );
 
     final materialLightTheme = ThemeData(
