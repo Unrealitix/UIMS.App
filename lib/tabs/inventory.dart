@@ -238,6 +238,7 @@ class _InventoryState extends State<Inventory> {
   }
 
   void _showItemDetails(BuildContext context, Item item) {
+    //TODO: Improve styling here
     showPlatformDialog(
       context: context,
       builder: (context) {
@@ -253,6 +254,8 @@ class _InventoryState extends State<Inventory> {
                 Text("Barcode: ${item.barcode}"),
               if (item.description != null && item.description!.isNotEmpty)
                 Text("Description: ${item.description}"),
+              if (item.supplier != null && item.supplier!.isNotEmpty)
+                Text("Supplier: ${item.supplier}"),
             ],
           ),
           actions: [

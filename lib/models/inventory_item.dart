@@ -52,129 +52,118 @@ class Item {
     );
   }
 
+  static Item getItemByBarcodeDialog(BuildContext context, String barcode) {
+    // List<Item> options = getItemsByBarcodeFromServer(barcode);
+    //TODO: Implement this
+    throw UnimplementedError();
+  }
+
+  ///Returns null if dialog was cancelled
   static Future<Item?> dialogNewItem(
     BuildContext context, {
     String? barcode,
   }) async {
-    String? name;
-    String? sku;
-    int quantity = 1;
-
-    bool itemAccepted = false;
-
-    await showPlatformDialog(
-      context: context,
-      builder: (context) {
-        return PlatformAlertDialog(
-          title: const Text("Add item"),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "Name",
-                ),
-                onChanged: (String s) {
-                  name = s;
-                },
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "SKU",
-                ),
-                onChanged: (String s) {
-                  sku = s;
-                },
-              ),
-              TextFormField(
-                initialValue: barcode,
-                decoration: const InputDecoration(
-                  labelText: "Barcode",
-                ),
-                onChanged: (String s) {
-                  barcode = s;
-                },
-              ),
-            ],
-          ),
-          actions: [
-            PlatformDialogAction(
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            PlatformDialogAction(
-              child: const Text("Add"),
-              onPressed: () {
-                if (name == null || sku == null) {
-                  //TODO: make name & sku EditTexts error-red
-                  return;
-                }
-                itemAccepted = true;
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+    return await dialogEditItem(
+      context,
+      Item(
+        name: "",
+        sku: "",
+        quantity: 1,
+        barcode: barcode,
+      ),
     );
-
-    if (!itemAccepted) return null;
-
-    return Item(name: name!, quantity: quantity, sku: sku!, barcode: barcode);
   }
 
-  static Future<Item?> dialogEditItem(context, item) async {
-    //TODO: Finish this and combine with dialogNewItem
-    // Currently it doesn't update to the api correctly
+  ///Returns null if dialog was cancelled
+  static Future<Item?> dialogEditItem(BuildContext context, Item item) async {
     await showPlatformDialog(
       context: context,
       builder: (context) {
+        bool isNew = item.sku.isEmpty;
+        String title = isNew ? "New Item" : "Edit Item";
+        String buttonText = isNew ? "Create" : "Save";
+
+        final formKey = GlobalKey<FormState>();
+
         return PlatformAlertDialog(
-          title: const Text("Edit item"),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                initialValue: item.name,
-                decoration: const InputDecoration(
-                  labelText: "Name",
-                ),
-                onChanged: (String s) {
-                  item.name = s;
-                },
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                //To align the delete button to the right:
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextFormField(
+                    initialValue: item.name,
+                    decoration: const InputDecoration(
+                      labelText: "Name",
+                    ),
+                    onChanged: (String s) {
+                      item.name = s;
+                    },
+                    validator: (String? s) {
+                      if (s == null || s.isEmpty) {
+                        return "Name cannot be empty";
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    initialValue: item.sku,
+                    decoration: const InputDecoration(
+                      labelText: "SKU",
+                    ),
+                    onChanged: (String s) {
+                      item.sku = s;
+                    },
+                    validator: (String? s) {
+                      if (s == null || s.isEmpty) {
+                        return "SKU cannot be empty";
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    initialValue: item.barcode,
+                    decoration: const InputDecoration(
+                      labelText: "Barcode",
+                    ),
+                    onChanged: (String s) {
+                      item.barcode = s;
+                    },
+                  ),
+                  TextFormField(
+                    initialValue: item.description,
+                    decoration: const InputDecoration(
+                      labelText: "Description",
+                    ),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    onChanged: (String s) {
+                      item.description = s;
+                    },
+                  ),
+                  TextFormField(
+                    initialValue: item.supplier,
+                    decoration: const InputDecoration(
+                      labelText: "Supplier",
+                    ),
+                    onChanged: (String s) {
+                      item.supplier = s;
+                    },
+                  ),
+                  if (!isNew)
+                    PlatformTextButton(
+                      child: const Text("Delete Item"),
+                      onPressed: () {
+                        Item.deleteItemFromServer(item);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                ],
               ),
-              TextFormField(
-                initialValue: item.sku,
-                decoration: const InputDecoration(
-                  labelText: "SKU",
-                ),
-                onChanged: (String s) {
-                  item.sku = s;
-                },
-              ),
-              TextFormField(
-                initialValue: item.barcode,
-                decoration: const InputDecoration(
-                  labelText: "Barcode",
-                ),
-                onChanged: (String s) {
-                  item.barcode = s;
-                },
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: PlatformTextButton(
-                  child: const Text("Delete Item"),
-                  onPressed: () async {
-                    Item.deleteItemFromServer(item);
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
           actions: [
             PlatformDialogAction(
@@ -184,17 +173,26 @@ class Item {
               },
             ),
             PlatformDialogAction(
-              child: const Text("Save"),
+              child: Text(buttonText),
               onPressed: () {
-                Navigator.of(context).pop();
+                if (formKey.currentState!.validate()) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
           ],
         );
       },
     );
+
+    //TODO: Refresh the inventory list
+
     return item;
   }
+
+  ///======================================================================///
+  ///                       REST API FUNCTIONS                             ///
+  ///======================================================================///
 
   //rest: get
   static Future<List<Item>> getItemsFromServer() async {
@@ -216,6 +214,11 @@ class Item {
     List<dynamic> json = jsonDecode(resp);
 
     return json.map((e) => Item.fromJson(e)).toList();
+  }
+
+  static List<Item> getItemsByBarcodeFromServer(String barcode) {
+    //TODO: Implement this
+    throw UnimplementedError();
   }
 
   //rest: post
