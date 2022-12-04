@@ -73,7 +73,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
           MobileScanner(
             controller: scannerController,
             fit: BoxFit.cover,
-            onDetect: (BarcodeCapture barcodesCapture) {
+            onDetect: (BarcodeCapture barcodesCapture) async {
               String? text = barcodesCapture.barcodes.first.rawValue;
               if (text == null) return;
               if (isPopupCurrentlyOpen) return;
@@ -93,7 +93,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
                   //   return;
                   // }
 
-                  _dialogNewScannedItem(context, text);
+                  await _dialogNewScannedItem(context, text);
                   break;
                 case _ScannerMode.addition:
                   player.play(existingBeep);
@@ -188,10 +188,6 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
 
     if (item == null) {
       print("item was null");
-      return;
-    }
-    if (item.barcode == null) {
-      print("item barcode was null");
       return;
     }
 
