@@ -66,6 +66,7 @@ class _InventoryState extends State<Inventory> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
+                        tooltip: "Decrease quantity by 1",
                         icon: Icon(Icons.remove, color: iconColor),
                         iconSize: iconSize,
                         color: isDark(context) ? Colors.white : Colors.black,
@@ -76,32 +77,37 @@ class _InventoryState extends State<Inventory> {
                           });
                         },
                       ),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color:
-                                (isDark(context) ? Colors.white : Colors.black)
-                                    .withOpacity(0.3),
+                      Tooltip(
+                        message: "Change quantity to a specific value",
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: (isDark(context)
+                                      ? Colors.white
+                                      : Colors.black)
+                                  .withOpacity(0.3),
+                            ),
                           ),
-                        ),
-                        onPressed: () async {
-                          int? i = await _showQuickQuantityDialog(
-                              context, items[index].quantity.toString());
-                          print(i);
-                          if (i == null) return; //Dialog cancelled
-                          setState(() {
-                            items[index].changeQuantityTo(i);
-                          });
-                        },
-                        child: PlatformText(
-                          items[index].quantity.toString(),
-                          style: darkText(context).copyWith(
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal,
+                          onPressed: () async {
+                            int? i = await _showQuickQuantityDialog(
+                                context, items[index].quantity.toString());
+                            print(i);
+                            if (i == null) return; //Dialog cancelled
+                            setState(() {
+                              items[index].changeQuantityTo(i);
+                            });
+                          },
+                          child: PlatformText(
+                            items[index].quantity.toString(),
+                            style: darkText(context).copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
                       ),
                       IconButton(
+                        tooltip: "Increase quantity by 1",
                         icon: Icon(Icons.add, color: iconColor),
                         iconSize: iconSize,
                         color: isDark(context) ? Colors.white : Colors.black,
@@ -271,6 +277,10 @@ class _InventoryState extends State<Inventory> {
                 Navigator.of(context).pop();
                 Item? ni = await Item.dialogEditItem(context, item);
                 if (ni == null || ni.sku.isEmpty || ni.name.isEmpty) return;
+                if (ni.toDelete) {
+                  setState(() => items.remove(item));
+                  return;
+                }
                 Item.changeItemOnServer(ni);
                 setState(() {
                   items[items.indexOf(item)] = ni;

@@ -18,6 +18,8 @@ class Item {
   String? description;
   String? supplier;
 
+  bool toDelete = false;
+
   Item({
     required this.name,
     required this.sku,
@@ -78,15 +80,18 @@ class Item {
   ///Returns null if dialog was cancelled
   static Future<Item?> dialogEditItem(BuildContext context, Item item) async {
     final formKey = GlobalKey<FormState>();
-    bool emptyReturn = false;
+    final nameKey = GlobalKey<FormFieldState>();
+    final skuKey = GlobalKey<FormFieldState>();
+    bool acceptReturn = false;
+
+    bool isNew = item.sku.isEmpty;
+    String title = isNew ? "New Item" : "Edit Item";
+    String buttonText = isNew ? "Create" : "Save";
 
     await showPlatformDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
-        bool isNew = item.sku.isEmpty;
-        String title = isNew ? "New Item" : "Edit Item";
-        String buttonText = isNew ? "Create" : "Save";
-
         InputDecoration id = InputDecoration(
           labelStyle:
               isDark(context) ? const TextStyle(color: Colors.white60) : null,
@@ -103,68 +108,78 @@ class Item {
                 //To align the delete button to the right:
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  TextFormField(
-                    initialValue: item.name,
-                    style: darkText(context),
-                    decoration: id.copyWith(
-                      labelText: "Name",
+                  Focus(
+                    child: TextFormField(
+                      key: nameKey,
+                      autofocus: isNew,
+                      initialValue: item.name,
+                      style: darkText(context),
+                      decoration: id.copyWith(labelText: "Name"),
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (String s) =>
+                          FocusScope.of(context).nextFocus(),
+                      onSaved: (String? s) => item.name = (s ?? "").trim(),
+                      validator: (String? s) {
+                        if (s == null || s.isEmpty) {
+                          return "Name cannot be empty";
+                        }
+                        return null;
+                      },
                     ),
-                    onSaved: (String? s) {
-                      item.name = s ?? "";
-                    },
-                    validator: (String? s) {
-                      if (s == null || s.isEmpty) {
-                        return "Name cannot be empty";
+                    onFocusChange: (bool hasFocus) {
+                      if (!hasFocus) {
+                        nameKey.currentState?.validate();
                       }
-                      return null;
                     },
                   ),
-                  TextFormField(
-                    initialValue: item.sku,
-                    style: darkText(context),
-                    decoration: id.copyWith(
-                      labelText: "SKU",
+                  Focus(
+                    child: TextFormField(
+                      key: skuKey,
+                      initialValue: item.sku,
+                      style: darkText(context),
+                      decoration: id.copyWith(labelText: "SKU"),
+                      textInputAction: TextInputAction.next,
+                      onSaved: (String? s) => item.sku = (s ?? "").trim(),
+                      validator: (String? s) {
+                        if (s == null || s.isEmpty) {
+                          return "SKU cannot be empty";
+                        }
+                        return null;
+                      },
                     ),
-                    onSaved: (String? s) {
-                      item.sku = s ?? "";
-                    },
-                    validator: (String? s) {
-                      if (s == null || s.isEmpty) {
-                        return "SKU cannot be empty";
+                    onFocusChange: (bool hasFocus) {
+                      if (!hasFocus) {
+                        skuKey.currentState?.validate();
                       }
-                      return null;
                     },
                   ),
                   TextFormField(
                     initialValue: item.barcode,
                     style: darkText(context),
-                    decoration: id.copyWith(
-                      labelText: "Barcode",
-                    ),
-                    onSaved: (String? s) {
-                      item.barcode = s;
-                    },
-                  ),
-                  TextFormField(
-                    initialValue: item.description,
-                    style: darkText(context),
-                    decoration: id.copyWith(
-                      labelText: "Description",
-                    ),
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    onSaved: (String? s) {
-                      item.description = s;
-                    },
+                    decoration: id.copyWith(labelText: "Barcode"),
+                    textInputAction: TextInputAction.next,
+                    onSaved: (String? s) => item.barcode = s?.trim(),
                   ),
                   TextFormField(
                     initialValue: item.supplier,
                     style: darkText(context),
-                    decoration: id.copyWith(
-                      labelText: "Supplier",
-                    ),
-                    onSaved: (String? s) {
-                      item.supplier = s;
+                    decoration: id.copyWith(labelText: "Supplier"),
+                    textInputAction: TextInputAction.next,
+                    onSaved: (String? s) => item.supplier = s?.trim(),
+                  ),
+                  TextFormField(
+                    initialValue: item.description,
+                    style: darkText(context),
+                    decoration: id.copyWith(labelText: "Description"),
+                    textInputAction: TextInputAction.newline,
+                    onSaved: (String? s) => item.description = s?.trim(),
+                    maxLines: null,
+                    onChanged: (String s) {
+                      int lines = s.split("\n").length;
+                      //TODO: Do we want a maximum or not?
+                      if (lines > 3) {
+                        FocusScope.of(context).unfocus();
+                      }
                     },
                   ),
                   if (!isNew)
@@ -172,7 +187,8 @@ class Item {
                       child: const Text("Delete Item"),
                       onPressed: () {
                         Item.deleteItemFromServer(item);
-                        emptyReturn = true;
+                        item.toDelete = true;
+                        acceptReturn = true;
                         Navigator.of(context).pop();
                       },
                     ),
@@ -184,7 +200,6 @@ class Item {
             PlatformDialogAction(
               child: const Text("Cancel"),
               onPressed: () {
-                emptyReturn = true;
                 Navigator.of(context).pop();
               },
             ),
@@ -194,6 +209,7 @@ class Item {
               onPressed: () {
                 formKey.currentState!.save();
                 if (formKey.currentState!.validate()) {
+                  acceptReturn = true;
                   Navigator.of(context).pop();
                 }
               },
@@ -204,11 +220,9 @@ class Item {
     );
 
     //For when the dialog was cancelled:
-    if (emptyReturn || item.sku.isEmpty || item.name.isEmpty) {
+    if (!acceptReturn || item.sku.isEmpty || item.name.isEmpty) {
       return null;
     }
-
-    //TODO: Refresh the inventory list
 
     return item;
   }
