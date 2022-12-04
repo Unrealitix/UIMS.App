@@ -250,19 +250,21 @@ class _InventoryState extends State<Inventory> {
       builder: (context) {
         return PlatformAlertDialog(
           title: Text(item.name),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("SKU: ${item.sku}"),
-              Text("Quantity: ${item.quantity}"),
-              if (item.barcode != null && item.barcode!.isNotEmpty)
-                Text("Barcode: ${item.barcode}"),
-              if (item.description != null && item.description!.isNotEmpty)
-                Text("Description: ${item.description}"),
-              if (item.supplier != null && item.supplier!.isNotEmpty)
-                Text("Supplier: ${item.supplier}"),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("SKU: ${item.sku}"),
+                Text("Quantity: ${item.quantity}"),
+                if (item.barcode != null && item.barcode!.isNotEmpty)
+                  Text("Barcode: ${item.barcode}"),
+                if (item.description != null && item.description!.isNotEmpty)
+                  Text("Description: ${item.description}"),
+                if (item.supplier != null && item.supplier!.isNotEmpty)
+                  Text("Supplier: ${item.supplier}"),
+              ],
+            ),
           ),
           actions: [
             PlatformDialogActionButton(
