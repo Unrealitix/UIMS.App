@@ -49,85 +49,88 @@ class _InventoryState extends State<Inventory> {
         RefreshIndicator(
           triggerMode: RefreshIndicatorTriggerMode.anywhere,
           onRefresh: _refreshList,
-          child: ListView.separated(
-            itemBuilder: (context, index) {
-              double iconSize = 20;
-              Color iconColor = isCupertino(context)
-                  ? CupertinoColors.systemBlue
-                  : isDark(context)
-                      ? Colors.white
-                      : Colors.black;
-              return ListTile(
-                title: Text(items[index].name, style: darkText(context)),
-                subtitle:
-                    Text("SKU: ${items[index].sku}", style: darkText(context)),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove, color: iconColor),
-                      iconSize: iconSize,
-                      color: isDark(context) ? Colors.white : Colors.black,
-                      onPressed: () {
-                        setState(() {
-                          items[index].changeQuantityTo(
-                              max(0, items[index].quantity - 1));
-                        });
-                      },
-                    ),
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: (isDark(context) ? Colors.white : Colors.black)
-                              .withOpacity(0.3),
+          child: Scrollbar(
+            child: ListView.separated(
+              itemBuilder: (context, index) {
+                double iconSize = 20;
+                Color iconColor = isCupertino(context)
+                    ? CupertinoColors.systemBlue
+                    : isDark(context)
+                        ? Colors.white
+                        : Colors.black;
+                return ListTile(
+                  title: Text(items[index].name, style: darkText(context)),
+                  subtitle: Text("SKU: ${items[index].sku}",
+                      style: darkText(context)),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.remove, color: iconColor),
+                        iconSize: iconSize,
+                        color: isDark(context) ? Colors.white : Colors.black,
+                        onPressed: () {
+                          setState(() {
+                            items[index].changeQuantityTo(
+                                max(0, items[index].quantity - 1));
+                          });
+                        },
+                      ),
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color:
+                                (isDark(context) ? Colors.white : Colors.black)
+                                    .withOpacity(0.3),
+                          ),
+                        ),
+                        onPressed: () async {
+                          int? i = await _showQuickQuantityDialog(
+                              context, items[index].quantity.toString());
+                          print(i);
+                          if (i == null) return; //Dialog cancelled
+                          setState(() {
+                            items[index].changeQuantityTo(i);
+                          });
+                        },
+                        child: PlatformText(
+                          items[index].quantity.toString(),
+                          style: darkText(context).copyWith(
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ),
-                      onPressed: () async {
-                        int? i = await _showQuickQuantityDialog(
-                            context, items[index].quantity.toString());
-                        print(i);
-                        if (i == null) return; //Dialog cancelled
-                        setState(() {
-                          items[index].changeQuantityTo(i);
-                        });
-                      },
-                      child: PlatformText(
-                        items[index].quantity.toString(),
-                        style: darkText(context).copyWith(
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                        ),
+                      IconButton(
+                        icon: Icon(Icons.add, color: iconColor),
+                        iconSize: iconSize,
+                        color: isDark(context) ? Colors.white : Colors.black,
+                        onPressed: () {
+                          setState(() {
+                            items[index]
+                                .changeQuantityTo(items[index].quantity + 1);
+                          });
+                        },
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add, color: iconColor),
-                      iconSize: iconSize,
-                      color: isDark(context) ? Colors.white : Colors.black,
-                      onPressed: () {
-                        setState(() {
-                          items[index]
-                              .changeQuantityTo(items[index].quantity + 1);
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  print("Tapped");
-                  _showItemDetails(context, items[index]);
-                },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const Divider(
-                indent: 8,
-                endIndent: 8,
-                height: 0,
-                thickness: 1,
-                //Cupertino has a bug where it doesn't show the divider in dark mode
-              );
-            },
-            itemCount: items.length,
+                    ],
+                  ),
+                  onTap: () {
+                    print("Tapped");
+                    _showItemDetails(context, items[index]);
+                  },
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider(
+                  indent: 8,
+                  endIndent: 8,
+                  height: 0,
+                  thickness: 1,
+                  //Cupertino has a bug where it doesn't show the divider in dark mode
+                );
+              },
+              itemCount: items.length,
+            ),
           ),
         ),
         Padding(
