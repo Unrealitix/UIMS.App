@@ -141,7 +141,7 @@ class _InventoryState extends State<Inventory> {
               tooltip: "Add item",
               onPressed: () async {
                 Item? ni = await Item.dialogNewItem(context);
-                if (ni == null) return;
+                if (ni == null || ni.name.isEmpty || ni.sku.isEmpty) return;
                 setState(() {
                   items.add(ni);
                   Item.sendNewItemToServer(ni);

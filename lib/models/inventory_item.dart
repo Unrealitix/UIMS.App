@@ -185,6 +185,11 @@ class Item {
       },
     );
 
+    //For when the dialog was cancelled:
+    if (item.sku.isEmpty || item.name.isEmpty) {
+      return null;
+    }
+
     //TODO: Refresh the inventory list
 
     return item;

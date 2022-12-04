@@ -186,7 +186,7 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
   _dialogNewScannedItem(BuildContext context, String text) async {
     Item? item = await Item.dialogNewItem(context, barcode: text);
 
-    if (item == null) {
+    if (item == null || item.name.isEmpty || item.sku.isEmpty) {
       print("item was null");
       return;
     }
