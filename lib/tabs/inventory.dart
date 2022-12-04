@@ -270,7 +270,7 @@ class _InventoryState extends State<Inventory> {
               onPressed: () async {
                 Navigator.of(context).pop();
                 Item? ni = await Item.dialogEditItem(context, item);
-                if (ni == null) return;
+                if (ni == null || ni.sku.isEmpty || ni.name.isEmpty) return;
                 Item.changeItemOnServer(ni);
                 setState(() {
                   items[items.indexOf(item)] = ni;

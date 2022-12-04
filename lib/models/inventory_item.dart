@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../rest_client.dart';
 import '../utils.dart';
 import 'inventory_group.dart';
@@ -76,6 +77,9 @@ class Item {
 
   ///Returns null if dialog was cancelled
   static Future<Item?> dialogEditItem(BuildContext context, Item item) async {
+    final formKey = GlobalKey<FormState>();
+    bool emptyReturn = false;
+
     await showPlatformDialog(
       context: context,
       builder: (context) {
@@ -83,7 +87,12 @@ class Item {
         String title = isNew ? "New Item" : "Edit Item";
         String buttonText = isNew ? "Create" : "Save";
 
-        final formKey = GlobalKey<FormState>();
+        InputDecoration id = InputDecoration(
+          labelStyle:
+              isDark(context) ? const TextStyle(color: Colors.white60) : null,
+          floatingLabelStyle:
+              isDark(context) ? const TextStyle(color: mainColour) : null,
+        );
 
         return PlatformAlertDialog(
           title: Text(title),
@@ -96,11 +105,12 @@ class Item {
                 children: [
                   TextFormField(
                     initialValue: item.name,
-                    decoration: const InputDecoration(
+                    style: darkText(context),
+                    decoration: id.copyWith(
                       labelText: "Name",
                     ),
-                    onChanged: (String s) {
-                      item.name = s;
+                    onSaved: (String? s) {
+                      item.name = s ?? "";
                     },
                     validator: (String? s) {
                       if (s == null || s.isEmpty) {
@@ -111,11 +121,12 @@ class Item {
                   ),
                   TextFormField(
                     initialValue: item.sku,
-                    decoration: const InputDecoration(
+                    style: darkText(context),
+                    decoration: id.copyWith(
                       labelText: "SKU",
                     ),
-                    onChanged: (String s) {
-                      item.sku = s;
+                    onSaved: (String? s) {
+                      item.sku = s ?? "";
                     },
                     validator: (String? s) {
                       if (s == null || s.isEmpty) {
@@ -126,30 +137,33 @@ class Item {
                   ),
                   TextFormField(
                     initialValue: item.barcode,
-                    decoration: const InputDecoration(
+                    style: darkText(context),
+                    decoration: id.copyWith(
                       labelText: "Barcode",
                     ),
-                    onChanged: (String s) {
+                    onSaved: (String? s) {
                       item.barcode = s;
                     },
                   ),
                   TextFormField(
                     initialValue: item.description,
-                    decoration: const InputDecoration(
+                    style: darkText(context),
+                    decoration: id.copyWith(
                       labelText: "Description",
                     ),
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    onChanged: (String s) {
+                    onSaved: (String? s) {
                       item.description = s;
                     },
                   ),
                   TextFormField(
                     initialValue: item.supplier,
-                    decoration: const InputDecoration(
+                    style: darkText(context),
+                    decoration: id.copyWith(
                       labelText: "Supplier",
                     ),
-                    onChanged: (String s) {
+                    onSaved: (String? s) {
                       item.supplier = s;
                     },
                   ),
@@ -158,6 +172,7 @@ class Item {
                       child: const Text("Delete Item"),
                       onPressed: () {
                         Item.deleteItemFromServer(item);
+                        emptyReturn = true;
                         Navigator.of(context).pop();
                       },
                     ),
@@ -169,12 +184,15 @@ class Item {
             PlatformDialogAction(
               child: const Text("Cancel"),
               onPressed: () {
+                emptyReturn = true;
                 Navigator.of(context).pop();
               },
             ),
             PlatformDialogAction(
+              //Save button
               child: Text(buttonText),
               onPressed: () {
+                formKey.currentState!.save();
                 if (formKey.currentState!.validate()) {
                   Navigator.of(context).pop();
                 }
@@ -186,7 +204,7 @@ class Item {
     );
 
     //For when the dialog was cancelled:
-    if (item.sku.isEmpty || item.name.isEmpty) {
+    if (emptyReturn || item.sku.isEmpty || item.name.isEmpty) {
       return null;
     }
 
@@ -283,9 +301,11 @@ class Item {
       }
       return "not connected to the internet";
     });
-    if (resp.isEmpty) {
-      showSnackbar("Server responded bad");
-    }
+    //Delete requests apparently return empty responses on success,
+    // so no need to show an error here
+    /*if (resp.isEmpty) {
+      // showSnackbar("Server responded bad");
+    }*/
     print("resp: $resp");
     showSnackbar("Successfully deleted item");
   }
