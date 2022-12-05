@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../main.dart';
 import '../models/inventory_item.dart';
 import '../utils.dart';
 
@@ -59,11 +60,11 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
   String get _scannerModeString {
     switch (scannerMode) {
       case _ScannerMode.newItem:
-        return "Hover over a barcode to add it";
+        return "Add new item to the inventory";
       case _ScannerMode.addition:
-        return "Hover over a barcode to add to it";
+        return "Increase inventory quantity";
       case _ScannerMode.subtraction:
-        return "Hover over a barcode to subtract from it";
+        return "Reduce inventory quantity";
     }
   }
 
@@ -159,36 +160,44 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Chip(label: Text(_scannerModeString)),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Chip(
+                label: Text(_scannerModeString),
+                backgroundColor: isDark(context) ? Color(0xFF303030) : accentColour
+                // labelStyle: TextStyle(color: Colors.white),
+                //backgroundColor: isDark(context) ? Color.fromRGBO(48, 48, 48, 1) : Colors.white,
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Align(
               alignment: Alignment.bottomRight,
               child: SpeedDial(
-                tooltip: "Switch scan mode",
+                tooltip: "Switch camera scanning mode",
                 icon: Icons.party_mode, //TODO: Find a better icon for this
                 activeIcon: Icons.close,
                 children: [
                   SpeedDialChild(
-                    child: const Icon(Icons.fiber_new_outlined),
-                    label: "Add new item",
+                    child: const Icon(Icons.playlist_add_check),
+                    label: "Add new item to the inventory",
                     onTap: () => setState(() {
                       scannerMode = _ScannerMode.newItem;
                     }),
                   ),
                   SpeedDialChild(
-                    child: const Icon(Icons.add),
-                    label: "Add quantity",
+                    child: const Icon(Icons.playlist_add),
+                    label: "Increase inventory quantity",
                     onTap: () => setState(() {
                       scannerMode = _ScannerMode.addition;
                     }),
                   ),
                   SpeedDialChild(
-                    child: const Icon(Icons.remove),
-                    label: "Subtract quantity",
+                    child: const Icon(Icons.playlist_remove),
+                    label: "Reduce inventory quantity",
                     onTap: () => setState(() {
                       scannerMode = _ScannerMode.subtraction;
                     }),
