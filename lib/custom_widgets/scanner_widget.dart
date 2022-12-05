@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../custom_widgets/scanner_crosshair.dart';
 import '../models/inventory_item.dart';
 import '../utils.dart';
 
@@ -64,6 +65,17 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
         return "Hover over a barcode to add to it";
       case _ScannerMode.subtraction:
         return "Hover over a barcode to subtract from it";
+    }
+  }
+
+  ViewfinderPainter get _scannerModeCrosshair {
+    switch (scannerMode) {
+      case _ScannerMode.newItem:
+        return ViewfinderPainter(radius: 50, length: 10);
+      case _ScannerMode.addition:
+        return ViewfinderPainter(radius: 20, length: 20);
+      case _ScannerMode.subtraction:
+        return ViewfinderPainter(radius: 20, length: 30);
     }
   }
 
@@ -195,6 +207,11 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
                   ),
                 ],
               ),
+            ),
+          ),
+          Center(
+            child: CustomPaint(
+              painter: _scannerModeCrosshair,
             ),
           ),
         ],
