@@ -60,11 +60,11 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
   String get _scannerModeString {
     switch (scannerMode) {
       case _ScannerMode.newItem:
-        return "Add new item to the inventory";
+        return "Scan a barcode to add a new item to the inventory";
       case _ScannerMode.addition:
-        return "Increase inventory quantity";
+        return "Scan a barcode to increase item inventory quantity";
       case _ScannerMode.subtraction:
-        return "Reduce inventory quantity";
+        return "Scan a barcode to reduce item inventory quantity";
     }
   }
 
