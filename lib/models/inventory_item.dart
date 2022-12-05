@@ -175,9 +175,8 @@ class Item {
                     onSaved: (String? s) => item.description = s?.trim(),
                     maxLines: null,
                     onChanged: (String s) {
-                      int lines = s.split("\n").length;
-                      //TODO: Do we want a maximum or not?
-                      if (lines > 3) {
+                      //if last two lines are empty, close keyboard
+                      if (s.endsWith("\n\n")) {
                         FocusScope.of(context).unfocus();
                       }
                     },
