@@ -1,0 +1,195 @@
+{
+	"appName": "Vanir IMS",
+	"@appName": {
+		"description": "The name of our application"
+	},
+
+	"dialogCancel": "Cancel",
+	"@dialogCancel": {
+		"description": "The label of the cancel button in a dialog"
+	},
+	"dialogOk": "OK",
+	"@dialogOk": {
+		"description": "The label of the OK button in a dialog"
+	},
+	"dialogYes": "Yes",
+	"@dialogYes": {
+		"description": "The label of the Yes button in a dialog"
+	},
+	"dialogNo": "No",
+	"@dialogNo": {
+		"description": "The label of the No button in a dialog"
+	},
+	"dialogEdit": "Edit",
+	"@dialogEdit": {
+		"description": "The label of the Edit button in a dialog"
+	},
+	"dialogClose": "Close",
+	"@dialogClose": {
+		"description": "The label of the Close button in a dialog"
+	},
+	"dialogCreate": "Create",
+	"@dialogCreate": {
+		"description": "The label of the Create button in a dialog"
+	},
+	"dialogSave": "Save",
+	"@dialogSave": {
+		"description": "The label of the Save button in a dialog"
+	},
+
+
+	"tabScanLabel": "Scan",
+	"@tabScanLabel": {
+		"description": "The label of the scan tab"
+	},
+	"tabScanTooltip": "Scan new items into inventory",
+	"@tabScanTooltip": {
+		"description": "The tooltip of the scan tab"
+	},
+
+	"tabInventoryLabel": "Inventory",
+	"@tabInventoryLabel": {
+		"description": "The label of the inventory tab"
+	},
+	"tabInventoryTooltip": "View and manage inventory",
+	"@tabInventoryTooltip": {
+		"description": "The tooltip of the inventory tab"
+	},
+
+
+	"scanModeHintNewItem": "Hover over a barcode to scan it",
+	"@scanModeHintNewItem": {
+		"description": "The hint shown when the user is scanning a new item into the inventory"
+	},
+	"scanModeHintAddition": "Hover over a barcode to add to it",
+	"@scanModeHintAddition": {
+		"description": "The hint shown when the user is scanning to add quantity to an existing item"
+	},
+	"scanModeHintSubtraction": "Hover over a barcode to subtract from it",
+	"@scanModeHintSubtraction": {
+		"description": "The hint shown when the user is scanning to subtract quantity from an existing item"
+	},
+
+	"scanSwitchCameraTooltip": "Switch Camera",
+	"@scanSwitchCameraTooltip": {
+		"description": "The tooltip of the button to switch the camera"
+	},
+	"scanToggleFlashTooltip": "Toggle Flash",
+	"@scanToggleFlashTooltip": {
+		"description": "The tooltip of the button to toggle the flash"
+	},
+
+	"scanSwitchModeTooltip": "Switch Mode",
+	"@scanSwitchModeTooltip": {
+		"description": "The tooltip of the button to switch the scan mode"
+	},
+	"scanModeLabelNewItem": "New Item",
+	"@scanModeLabelNewItem": {
+		"description": "The label of the scan mode FAB option to scan a new item into the inventory"
+	},
+	"scanModeLabelAddition": "Addition",
+	"@scanModeLabelAddition": {
+		"description": "The label of the scan mode FAB option to add quantity to an existing item"
+	},
+	"scanModeLabelSubtraction": "Subtraction",
+	"@scanModeLabelSubtraction": {
+		"description": "The label of the scan mode FAB option to subtract quantity from an existing item"
+	},
+
+
+	"inventoryListItemSubtitle": "SKU: {sku}",
+	"@inventoryListItemSubtitle": {
+		"description": "The subtitle of an inventory list item",
+		"placeholders": {
+			"sku": {
+				"type": "String"
+			}
+		}
+	},
+	"inventoryListItemDecreaseQuantityTooltip": "Decrease quantity by 1",
+	"@inventoryListItemDecreaseQuantityTooltip": {
+		"description": "The tooltip of the button to decrease the quantity of an item by 1"
+	},
+	"inventoryListItemSpecificQuantityTooltip": "Set quantity to a specific value",
+	"@inventoryListItemSpecificQuantityTooltip": {
+		"description": "The tooltip of the button to set the quantity of an item to a specific value"
+	},
+	"inventoryListItemIncreaseQuantityTooltip": "Increase quantity by 1",
+	"@inventoryListItemIncreaseQuantityTooltip": {
+		"description": "The tooltip of the button to increase the quantity of an item by 1"
+	},
+
+	"inventoryFABTooltip": "Add new item",
+	"@inventoryFABTooltip": {
+		"description": "The tooltip of the FAB to add a new item to the inventory"
+	},
+
+	"quickQuantityDialogTitle": "Set Quantity",
+	"@quickQuantityDialogTitle": {
+		"description": "The title of the dialog to set the quantity of an item"
+	},
+	"quickQuantityDialogHint": "Quantity",
+	"@quickQuantityDialogHint": {
+		"description": "The hint (placeholder) of the text field in the dialog to set the quantity of an item"
+	},
+	"quickQuantityDialogLabel": "Enter the new quantity",
+	"@quickQuantityDialogLabel": {
+		"description": "The label (instruction) of the text field in the dialog to set the quantity of an item"
+	},
+	"quickQuantityDialogCounterText": "Previous quantity: {initial}",
+	"@quickQuantityDialogCounterText": {
+		"description": "The counter text (bottom right) of the text field in the dialog to set the quantity of an item",
+		"placeholders": {
+			"initial": {
+				"type": "String"
+			}
+		}
+	},
+
+	"itemPropertyName": "Name",
+	"@itemPropertyName": {
+		"description": "The label of the name property of an item"
+	},
+	"itemPropertySKU": "SKU",
+	"@itemPropertySKU": {
+		"description": "The label of the SKU property of an item"
+	},
+	"itemPropertyQuantity": "Quantity",
+	"@itemPropertyQuantity": {
+		"description": "The label of the quantity property of an item"
+	},
+	"itemPropertyBarcode": "Barcode",
+	"@itemPropertyBarcode": {
+		"description": "The label of the barcode property of an item"
+	},
+	"itemPropertySupplier": "Supplier",
+	"@itemPropertySupplier": {
+		"description": "The label of the supplier property of an item"
+	},
+	"itemPropertyDescription": "Description",
+	"@itemPropertyDescription": {
+		"description": "The label of the description property of an item"
+	},
+
+
+	"itemNewDialogTitle": "New Item",
+	"@itemNewDialogTitle": {
+		"description": "The title of the dialog to add a new item to the inventory"
+	},
+	"itemEditDialogTitle": "Edit Item",
+	"@itemEditDialogTitle": {
+		"description": "The title of the dialog to edit an existing item in the inventory"
+	},
+	"itemNewDialogNameEmptyWarning": "Name cannot be empty",
+	"@itemNewDialogNameEmptyWarning": {
+		"description": "The warning shown when the user tries to add a new item with an empty name"
+	},
+	"itemNewDialogSKUEmptyWarning": "SKU cannot be empty",
+	"@itemNewDialogSKUEmptyWarning": {
+		"description": "The warning shown when the user tries to add a new item with an empty SKU"
+	},
+	"itemEditDialogDeleteItemButton": "Delete Item",
+	"@itemEditDialogDeleteItemButton": {
+		"description": "The label of the button to delete an item"
+	}
+}

@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../main.dart';
 import '../rest_client.dart';
 import '../utils.dart';
@@ -85,8 +87,12 @@ class Item {
     bool acceptReturn = false;
 
     bool isNew = item.sku.isEmpty;
-    String title = isNew ? "New Item" : "Edit Item";
-    String buttonText = isNew ? "Create" : "Save";
+    String title = isNew
+        ? AppLocalizations.of(context)!.itemNewDialogTitle
+        : AppLocalizations.of(context)!.itemEditDialogTitle;
+    String buttonText = isNew
+        ? AppLocalizations.of(context)!.dialogCreate
+        : AppLocalizations.of(context)!.dialogSave;
 
     await showPlatformDialog(
       barrierDismissible: false,
@@ -114,14 +120,17 @@ class Item {
                       autofocus: isNew,
                       initialValue: item.name,
                       style: darkText(context),
-                      decoration: id.copyWith(labelText: "Name"),
+                      decoration: id.copyWith(
+                          labelText:
+                              AppLocalizations.of(context)!.itemPropertyName),
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (String s) =>
                           FocusScope.of(context).nextFocus(),
                       onSaved: (String? s) => item.name = (s ?? "").trim(),
                       validator: (String? s) {
                         if (s == null || s.isEmpty) {
-                          return "Name cannot be empty";
+                          return AppLocalizations.of(context)!
+                              .itemNewDialogNameEmptyWarning;
                         }
                         return null;
                       },
@@ -137,12 +146,15 @@ class Item {
                       key: skuKey,
                       initialValue: item.sku,
                       style: darkText(context),
-                      decoration: id.copyWith(labelText: "SKU"),
+                      decoration: id.copyWith(
+                          labelText:
+                              AppLocalizations.of(context)!.itemPropertySKU),
                       textInputAction: TextInputAction.next,
                       onSaved: (String? s) => item.sku = (s ?? "").trim(),
                       validator: (String? s) {
                         if (s == null || s.isEmpty) {
-                          return "SKU cannot be empty";
+                          return AppLocalizations.of(context)!
+                              .itemNewDialogSKUEmptyWarning;
                         }
                         return null;
                       },
@@ -156,21 +168,27 @@ class Item {
                   TextFormField(
                     initialValue: item.barcode,
                     style: darkText(context),
-                    decoration: id.copyWith(labelText: "Barcode"),
+                    decoration: id.copyWith(
+                        labelText:
+                            AppLocalizations.of(context)!.itemPropertyBarcode),
                     textInputAction: TextInputAction.next,
                     onSaved: (String? s) => item.barcode = s?.trim(),
                   ),
                   TextFormField(
                     initialValue: item.supplier,
                     style: darkText(context),
-                    decoration: id.copyWith(labelText: "Supplier"),
+                    decoration: id.copyWith(
+                        labelText:
+                            AppLocalizations.of(context)!.itemPropertySupplier),
                     textInputAction: TextInputAction.next,
                     onSaved: (String? s) => item.supplier = s?.trim(),
                   ),
                   TextFormField(
                     initialValue: item.description,
                     style: darkText(context),
-                    decoration: id.copyWith(labelText: "Description"),
+                    decoration: id.copyWith(
+                        labelText: AppLocalizations.of(context)!
+                            .itemPropertyDescription),
                     textInputAction: TextInputAction.newline,
                     onSaved: (String? s) => item.description = s?.trim(),
                     maxLines: null,
@@ -183,7 +201,8 @@ class Item {
                   ),
                   if (!isNew)
                     PlatformTextButton(
-                      child: const Text("Delete Item"),
+                      child: Text(AppLocalizations.of(context)!
+                          .itemEditDialogDeleteItemButton),
                       onPressed: () {
                         Item.deleteItemFromServer(item);
                         item.toDelete = true;
@@ -197,7 +216,7 @@ class Item {
           ),
           actions: [
             PlatformDialogAction(
-              child: const Text("Cancel"),
+              child: Text(AppLocalizations.of(context)!.dialogCancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },

@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'l10n/l10n.dart';
 import 'tabbed_view.dart';
 import 'utils.dart';
 
@@ -66,10 +70,12 @@ class MyApp extends StatelessWidget {
       ),
       builder: (context) => PlatformSnackApp(
         scaffoldMessengerKey: snackbarKey,
-        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          DefaultMaterialLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
+        supportedLocales: L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
         ],
         title: "Vanir IMS",
         materialTheme: materialLightTheme,

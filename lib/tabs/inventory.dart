@@ -4,6 +4,8 @@ import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../utils.dart';
 import '../tabbed_view.dart';
 import '../models/inventory_item.dart';
@@ -60,13 +62,16 @@ class _InventoryState extends State<Inventory> {
                         : Colors.black;
                 return ListTile(
                   title: Text(items[index].name, style: darkText(context)),
-                  subtitle: Text("SKU: ${items[index].sku}",
+                  subtitle: Text(
+                      AppLocalizations.of(context)!
+                          .inventoryListItemSubtitle(items[index].sku),
                       style: darkText(context)),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        tooltip: "Decrease quantity by 1",
+                        tooltip: AppLocalizations.of(context)!
+                            .inventoryListItemDecreaseQuantityTooltip,
                         icon: Icon(Icons.remove, color: iconColor),
                         iconSize: iconSize,
                         color: isDark(context) ? Colors.white : Colors.black,
@@ -78,7 +83,8 @@ class _InventoryState extends State<Inventory> {
                         },
                       ),
                       Tooltip(
-                        message: "Change quantity to a specific value",
+                        message: AppLocalizations.of(context)!
+                            .inventoryListItemSpecificQuantityTooltip,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
@@ -107,7 +113,8 @@ class _InventoryState extends State<Inventory> {
                         ),
                       ),
                       IconButton(
-                        tooltip: "Increase quantity by 1",
+                        tooltip: AppLocalizations.of(context)!
+                            .inventoryListItemIncreaseQuantityTooltip,
                         icon: Icon(Icons.add, color: iconColor),
                         iconSize: iconSize,
                         color: isDark(context) ? Colors.white : Colors.black,
@@ -144,7 +151,7 @@ class _InventoryState extends State<Inventory> {
           child: Align(
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
-              tooltip: "Add item",
+              tooltip: AppLocalizations.of(context)!.inventoryFABTooltip,
               onPressed: () async {
                 Item? ni = await Item.dialogNewItem(context);
                 if (ni == null || ni.name.isEmpty || ni.sku.isEmpty) return;
@@ -207,15 +214,19 @@ class _InventoryState extends State<Inventory> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return PlatformAlertDialog(
-              title: const Text("Quantity"),
+              title:
+                  Text(AppLocalizations.of(context)!.quickQuantityDialogTitle),
               content: TextField(
                 controller: controller,
                 autofocus: true,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: "Quantity",
-                  labelText: "Enter the new quantity",
-                  counterText: "Previous quantity: $initial", //TODO: Maybe..
+                  hintText:
+                      AppLocalizations.of(context)!.quickQuantityDialogHint,
+                  labelText:
+                      AppLocalizations.of(context)!.quickQuantityDialogLabel,
+                  counterText: AppLocalizations.of(context)!
+                      .quickQuantityDialogCounterText(initial),
                   errorText: errorMessage,
                 ),
                 style: darkText(context),
@@ -223,14 +234,14 @@ class _InventoryState extends State<Inventory> {
               ),
               actions: [
                 PlatformDialogAction(
-                  child: const Text("Cancel"),
+                  child: Text(AppLocalizations.of(context)!.dialogCancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                     result = null;
                   },
                 ),
                 PlatformDialogAction(
-                  child: const Text("OK"),
+                  child: Text(AppLocalizations.of(context)!.dialogOk),
                   onPressed: () => attemptChange(setDialogState),
                 ),
               ],
@@ -255,14 +266,19 @@ class _InventoryState extends State<Inventory> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("SKU: ${item.sku}"),
-                Text("Quantity: ${item.quantity}"),
+                Text(
+                    "${AppLocalizations.of(context)!.itemPropertySKU}: ${item.sku}"),
+                Text(
+                    "${AppLocalizations.of(context)!.itemPropertyQuantity}: ${item.quantity}"),
                 if (item.barcode != null && item.barcode!.isNotEmpty)
-                  Text("Barcode: ${item.barcode}"),
-                if (item.description != null && item.description!.isNotEmpty)
-                  Text("Description: ${item.description}"),
+                  Text(
+                      "${AppLocalizations.of(context)!.itemPropertyBarcode}: ${item.barcode}"),
                 if (item.supplier != null && item.supplier!.isNotEmpty)
-                  Text("Supplier: ${item.supplier}"),
+                  Text(
+                      "${AppLocalizations.of(context)!.itemPropertySupplier}: ${item.supplier}"),
+                if (item.description != null && item.description!.isNotEmpty)
+                  Text(
+                      "${AppLocalizations.of(context)!.itemPropertyDescription}: ${item.description}"),
               ],
             ),
           ),
@@ -270,9 +286,9 @@ class _InventoryState extends State<Inventory> {
             PlatformDialogActionButton(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.edit),
-                  Text(" Edit"),
+                children: [
+                  const Icon(Icons.edit),
+                  Text(" ${AppLocalizations.of(context)!.dialogEdit}"),
                 ],
               ),
               onPressed: () async {
@@ -290,7 +306,7 @@ class _InventoryState extends State<Inventory> {
               },
             ),
             PlatformDialogActionButton(
-              child: const Text("Close"),
+              child: Text(AppLocalizations.of(context)!.dialogClose),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],

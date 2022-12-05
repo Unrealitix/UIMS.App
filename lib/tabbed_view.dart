@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'tabs/inventory.dart';
 import 'tabs/scan.dart';
 
@@ -53,8 +55,8 @@ class _TabbedViewState extends State<TabbedView> {
       tabController: tabController,
       appBarBuilder: (context, index) => PlatformAppBar(
         title: Row(
-          children: const [
-            Image(
+          children: [
+            const Image(
               fit: BoxFit.cover,
               height: 52,
               image: ResizeImage(
@@ -62,7 +64,7 @@ class _TabbedViewState extends State<TabbedView> {
                 width: 52,
               ),
             ),
-            Text("Vanir IMS"),
+            Text(AppLocalizations.of(context)!.appName),
           ],
         ),
       ),
@@ -83,19 +85,20 @@ class _TabbedViewState extends State<TabbedView> {
       cupertinoTabs: (context, platform) => CupertinoTabBarData(
         height: 72,
       ),
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          label: "Scan",
-          tooltip: "Scan new items into inventory",
-          icon: Icon(Icons.document_scanner, size: unselectedIconSize),
-          activeIcon:
-              Icon(Icons.document_scanner_rounded, size: selectedIconSize),
+          label: AppLocalizations.of(context)!.tabScanLabel,
+          tooltip: AppLocalizations.of(context)!.tabScanTooltip,
+          icon: const Icon(Icons.document_scanner, size: unselectedIconSize),
+          activeIcon: const Icon(Icons.document_scanner_rounded,
+              size: selectedIconSize),
         ),
         BottomNavigationBarItem(
-          label: "Inventory",
-          tooltip: "View inventory",
-          icon: Icon(Icons.list_alt, size: unselectedIconSize),
-          activeIcon: Icon(Icons.list_alt_rounded, size: selectedIconSize),
+          label: AppLocalizations.of(context)!.tabInventoryLabel,
+          tooltip: AppLocalizations.of(context)!.tabInventoryTooltip,
+          icon: const Icon(Icons.list_alt, size: unselectedIconSize),
+          activeIcon:
+              const Icon(Icons.list_alt_rounded, size: selectedIconSize),
         ),
       ],
     );
