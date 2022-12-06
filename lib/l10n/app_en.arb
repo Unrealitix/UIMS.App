@@ -191,5 +191,18 @@
 	"itemEditDialogDeleteItemButton": "Delete Item",
 	"@itemEditDialogDeleteItemButton": {
 		"description": "The label of the button to delete an item"
+	},
+
+	"itemListSearchbarHint": "Search",
+	"@itemListSearchbarHint": {
+		"description": "The hint (placeholder) of the search bar in the item list"
+	},
+	"itemListFilterButtonTooltip": "Filter",
+	"@itemListFilterButtonTooltip": {
+		"description": "The tooltip of the button to filter the item list"
+	},
+	"itemListSortButtonTooltip": "Sort",
+	"@itemListSortButtonTooltip": {
+		"description": "The tooltip of the button to sort the item list"
 	}
 }

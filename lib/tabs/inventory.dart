@@ -19,6 +19,7 @@ class Inventory extends Tabby {
 
 class _InventoryState extends State<Inventory> {
   late List<Item> items;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -43,107 +44,229 @@ class _InventoryState extends State<Inventory> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //TODO: Use FutureBuilder to show a loading indicator while waiting for the items to load
     print("Inventory::build");
+    const double topBarElevation = 2;
+    const double roundedCorners = 4;
+
     return Stack(
       children: [
         RefreshIndicator(
           triggerMode: RefreshIndicatorTriggerMode.anywhere,
           onRefresh: _refreshList,
-          child: Scrollbar(
-            child: ListView.separated(
-              itemBuilder: (context, index) {
-                double iconSize = 20;
-                Color iconColor = isCupertino(context)
-                    ? CupertinoColors.systemBlue
-                    : isDark(context)
-                        ? Colors.white
-                        : Colors.black;
-                return ListTile(
-                  title: Text(items[index].name, style: darkText(context)),
-                  subtitle: Text(
-                      AppLocalizations.of(context)!
-                          .inventoryListItemSubtitle(items[index].sku),
-                      style: darkText(context)),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: AppLocalizations.of(context)!
-                            .inventoryListItemDecreaseQuantityTooltip,
-                        icon: Icon(Icons.remove, color: iconColor),
-                        iconSize: iconSize,
-                        color: isDark(context) ? Colors.white : Colors.black,
-                        onPressed: () {
-                          setState(() {
-                            items[index].changeQuantityTo(
-                                max(0, items[index].quantity - 1));
-                          });
-                        },
-                      ),
-                      Tooltip(
-                        message: AppLocalizations.of(context)!
-                            .inventoryListItemSpecificQuantityTooltip,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                              color: (isDark(context)
-                                      ? Colors.white
-                                      : Colors.black)
-                                  .withOpacity(0.3),
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                elevation: 0,
+                floating: true,
+                backgroundColor: Colors.transparent,
+                titleSpacing: 3,
+                title: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Flexible(
+                      child: Material(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(roundedCorners),
+                        ),
+                        elevation: topBarElevation,
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Theme.of(context).backgroundColor,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(roundedCorners),
+                              ),
                             ),
+                            hintText: AppLocalizations.of(context)!
+                                .itemListSearchbarHint,
+                            prefixIcon: const Icon(Icons.search),
+                            contentPadding: const EdgeInsets.all(0),
+                            suffixIcon: _searchController.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                  )
+                                : null,
                           ),
-                          onPressed: () async {
-                            int? i = await _showQuickQuantityDialog(
-                                context, items[index].quantity.toString());
-                            print(i);
-                            if (i == null) return; //Dialog cancelled
-                            setState(() {
-                              items[index].changeQuantityTo(i);
-                            });
+                          onChanged: (String s) {
+                            setState(() {}); //This is to update the suffix icon
                           },
-                          child: PlatformText(
-                            items[index].quantity.toString(),
-                            style: darkText(context).copyWith(
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    //round inline filter button
+                    Padding(
+                      padding: const EdgeInsets.only(left: 3),
+                      child: SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: Tooltip(
+                          message: AppLocalizations.of(context)!
+                              .itemListFilterButtonTooltip,
+                          child: RawMaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(roundedCorners),
                             ),
+                            elevation: topBarElevation,
+                            fillColor: Theme.of(context).backgroundColor,
+                            child: const Icon(Icons.filter_alt),
+                            onPressed: () {
+                              print("Filter button pressed");
+                            },
                           ),
                         ),
                       ),
-                      IconButton(
-                        tooltip: AppLocalizations.of(context)!
-                            .inventoryListItemIncreaseQuantityTooltip,
-                        icon: Icon(Icons.add, color: iconColor),
-                        iconSize: iconSize,
-                        color: isDark(context) ? Colors.white : Colors.black,
-                        onPressed: () {
-                          setState(() {
-                            items[index]
-                                .changeQuantityTo(items[index].quantity + 1);
-                          });
-                        },
+                    ),
+                    //round inline sort button
+                    Padding(
+                      padding: const EdgeInsets.only(left: 3),
+                      child: SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: Tooltip(
+                          message: AppLocalizations.of(context)!
+                              .itemListSortButtonTooltip,
+                          child: RawMaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(roundedCorners),
+                            ),
+                            elevation: topBarElevation,
+                            fillColor: Theme.of(context).backgroundColor,
+                            child: const Icon(Icons.sort),
+                            onPressed: () {
+                              print("Sort button pressed");
+                            },
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  onTap: () {
-                    print("Tapped");
-                    _showItemDetails(context, items[index]);
+                    ),
+                  ],
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    double iconSize = 20;
+                    Color iconColor = isCupertino(context)
+                        ? CupertinoColors.systemBlue
+                        : isDark(context)
+                            ? Colors.white
+                            : Colors.black;
+                    return Column(
+                      children: [
+                        ListTile(
+                          title:
+                              Text(items[index].name, style: darkText(context)),
+                          subtitle: Text(
+                              AppLocalizations.of(context)!
+                                  .inventoryListItemSubtitle(items[index].sku),
+                              style: darkText(context)),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                tooltip: AppLocalizations.of(context)!
+                                    .inventoryListItemDecreaseQuantityTooltip,
+                                icon: Icon(Icons.remove, color: iconColor),
+                                iconSize: iconSize,
+                                color: isDark(context)
+                                    ? Colors.white
+                                    : Colors.black,
+                                onPressed: () {
+                                  setState(() {
+                                    items[index].changeQuantityTo(
+                                        max(0, items[index].quantity - 1));
+                                  });
+                                },
+                              ),
+                              Tooltip(
+                                message: AppLocalizations.of(context)!
+                                    .inventoryListItemSpecificQuantityTooltip,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: (isDark(context)
+                                              ? Colors.white
+                                              : Colors.black)
+                                          .withOpacity(0.3),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    int? i = await _showQuickQuantityDialog(
+                                        context,
+                                        items[index].quantity.toString());
+                                    print(i);
+                                    if (i == null) return; //Dialog cancelled
+                                    setState(() {
+                                      items[index].changeQuantityTo(i);
+                                    });
+                                  },
+                                  child: PlatformText(
+                                    items[index].quantity.toString(),
+                                    style: darkText(context).copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: AppLocalizations.of(context)!
+                                    .inventoryListItemIncreaseQuantityTooltip,
+                                icon: Icon(Icons.add, color: iconColor),
+                                iconSize: iconSize,
+                                color: isDark(context)
+                                    ? Colors.white
+                                    : Colors.black,
+                                onPressed: () {
+                                  setState(() {
+                                    items[index].changeQuantityTo(
+                                        items[index].quantity + 1);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            print("Tapped");
+                            _showItemDetails(context, items[index]);
+                          },
+                        ),
+                        if (index != items.length - 1)
+                          const Divider(
+                            indent: 8,
+                            endIndent: 8,
+                            height: 0,
+                            thickness: 1,
+                          )
+                        else
+                          const SizedBox(height: 64),
+                      ],
+                    );
                   },
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const Divider(
-                  indent: 8,
-                  endIndent: 8,
-                  height: 0,
-                  thickness: 1,
-                  //Cupertino has a bug where it doesn't show the divider in dark mode
-                );
-              },
-              itemCount: items.length,
-            ),
+                  childCount: items.length,
+                ),
+              ),
+            ],
           ),
         ),
         Padding(

@@ -55,5 +55,9 @@
 	"itemEditDialogTitle": "Bewerk Item",
 	"itemNewDialogNameEmptyWarning": "Naam mag niet leeg zijn",
 	"itemNewDialogSKUEmptyWarning": "SKU mag niet leeg zijn",
-	"itemEditDialogDeleteItemButton": "Verwijder Item"
+	"itemEditDialogDeleteItemButton": "Verwijder Item",
+
+	"itemListSearchbarHint": "Zoeken",
+	"itemListFilterButtonTooltip": "Filter",
+	"itemListSortButtonTooltip": "Sorteer"
 }
