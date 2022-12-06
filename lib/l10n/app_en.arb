@@ -56,16 +56,25 @@
 		"description": "The tooltip of the inventory tab"
 	},
 
+	"tabMoreLabel": "More",
+	"@tabMoreLabel": {
+		"description": "The label of the more tab"
+	},
+	"tabMoreTooltip": "More options",
+	"@tabMoreTooltip": {
+		"description": "The tooltip of the more tab"
+	},
 
-	"scanModeHintNewItem": "Hover over a barcode to scan it",
+
+	"scanModeHintNewItem": "Scan a barcode to add a new item to the inventory",
 	"@scanModeHintNewItem": {
 		"description": "The hint shown when the user is scanning a new item into the inventory"
 	},
-	"scanModeHintAddition": "Hover over a barcode to add to it",
+	"scanModeHintAddition": "Scan a barcode to increase item inventory quantity",
 	"@scanModeHintAddition": {
 		"description": "The hint shown when the user is scanning to add quantity to an existing item"
 	},
-	"scanModeHintSubtraction": "Hover over a barcode to subtract from it",
+	"scanModeHintSubtraction": "Scan a barcode to reduce item inventory quantity",
 	"@scanModeHintSubtraction": {
 		"description": "The hint shown when the user is scanning to subtract quantity from an existing item"
 	},

@@ -17,6 +17,9 @@
 	"tabInventoryLabel": "Inventaris",
 	"tabInventoryTooltip": "Bekijk en beheer uw inventaris",
 
+	"tabMoreLabel": "Meer",
+	"tabMoreTooltip": "Meer opties",
+
 
 	"scanModeHintNewItem": "Camera over barcode voeg toe aan inventaris",
 	"scanModeHintAddition": "Camera over barcode om aantal met 1 te verhogen",

@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../main.dart';
 import '../rest_client.dart';
 import '../utils.dart';
 import 'inventory_group.dart';
@@ -94,18 +92,11 @@ class Item {
         ? AppLocalizations.of(context)!.dialogCreate
         : AppLocalizations.of(context)!.dialogSave;
 
-    await showPlatformDialog(
+    await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        InputDecoration id = InputDecoration(
-          labelStyle:
-              isDark(context) ? const TextStyle(color: Colors.white60) : null,
-          floatingLabelStyle:
-              isDark(context) ? const TextStyle(color: mainColour) : null,
-        );
-
-        return PlatformAlertDialog(
+        return AlertDialog(
           title: Text(title),
           content: SingleChildScrollView(
             child: Form(
@@ -119,10 +110,10 @@ class Item {
                       key: nameKey,
                       autofocus: isNew,
                       initialValue: item.name,
-                      style: darkText(context),
-                      decoration: id.copyWith(
-                          labelText:
-                              AppLocalizations.of(context)!.itemPropertyName),
+                      decoration: InputDecoration(
+                        labelText:
+                            AppLocalizations.of(context)!.itemPropertyName,
+                      ),
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (String s) =>
                           FocusScope.of(context).nextFocus(),
@@ -145,10 +136,10 @@ class Item {
                     child: TextFormField(
                       key: skuKey,
                       initialValue: item.sku,
-                      style: darkText(context),
-                      decoration: id.copyWith(
-                          labelText:
-                              AppLocalizations.of(context)!.itemPropertySKU),
+                      decoration: InputDecoration(
+                        labelText:
+                            AppLocalizations.of(context)!.itemPropertySKU,
+                      ),
                       textInputAction: TextInputAction.next,
                       onSaved: (String? s) => item.sku = (s ?? "").trim(),
                       validator: (String? s) {
@@ -167,28 +158,28 @@ class Item {
                   ),
                   TextFormField(
                     initialValue: item.barcode,
-                    style: darkText(context),
-                    decoration: id.copyWith(
-                        labelText:
-                            AppLocalizations.of(context)!.itemPropertyBarcode),
+                    decoration: InputDecoration(
+                      labelText:
+                          AppLocalizations.of(context)!.itemPropertyBarcode,
+                    ),
                     textInputAction: TextInputAction.next,
                     onSaved: (String? s) => item.barcode = s?.trim(),
                   ),
                   TextFormField(
                     initialValue: item.supplier,
-                    style: darkText(context),
-                    decoration: id.copyWith(
-                        labelText:
-                            AppLocalizations.of(context)!.itemPropertySupplier),
+                    decoration: InputDecoration(
+                      labelText:
+                          AppLocalizations.of(context)!.itemPropertySupplier,
+                    ),
                     textInputAction: TextInputAction.next,
                     onSaved: (String? s) => item.supplier = s?.trim(),
                   ),
                   TextFormField(
                     initialValue: item.description,
-                    style: darkText(context),
-                    decoration: id.copyWith(
-                        labelText: AppLocalizations.of(context)!
-                            .itemPropertyDescription),
+                    decoration: InputDecoration(
+                      labelText:
+                          AppLocalizations.of(context)!.itemPropertyDescription,
+                    ),
                     textInputAction: TextInputAction.newline,
                     onSaved: (String? s) => item.description = s?.trim(),
                     maxLines: null,
@@ -200,9 +191,15 @@ class Item {
                     },
                   ),
                   if (!isNew)
-                    PlatformTextButton(
-                      child: Text(AppLocalizations.of(context)!
-                          .itemEditDialogDeleteItemButton),
+                    TextButton(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.warning),
+                          Text(
+                              " ${AppLocalizations.of(context)!.itemEditDialogDeleteItemButton}"),
+                        ],
+                      ),
                       onPressed: () {
                         Item.deleteItemFromServer(item);
                         item.toDelete = true;
@@ -215,13 +212,13 @@ class Item {
             ),
           ),
           actions: [
-            PlatformDialogAction(
+            TextButton(
               child: Text(AppLocalizations.of(context)!.dialogCancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            PlatformDialogAction(
+            TextButton(
               //Save button
               child: Text(buttonText),
               onPressed: () {

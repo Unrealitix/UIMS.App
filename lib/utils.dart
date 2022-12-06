@@ -3,18 +3,6 @@ import 'package:flutter/material.dart';
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
 
-//TODO: Reduce usage of this function with proper theming
-bool isDark(BuildContext context) {
-  return MediaQuery.of(context).platformBrightness == Brightness.dark;
-}
-
-//TODO: Remove need for this function with proper theming
-TextStyle darkText(BuildContext context) {
-  return TextStyle(
-    color: isDark(context) ? Colors.white : Colors.black,
-  );
-}
-
 void showSnackbar(String message) {
   snackbarKey.currentState?.showSnackBar(
     SnackBar(content: Text(message)),

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:enough_platform_widgets/enough_platform_widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,9 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'l10n/l10n.dart';
 import 'tabbed_view.dart';
 import 'utils.dart';
-
-//TODO: Remove this, it's only for debugging
-const PlatformStyle _debugPlatformStyle = PlatformStyle.Material;
 
 const Color mainColour = Color(0xFFFF8E00);
 const Color accentColour = Color(0xFFFFB04C);
@@ -23,67 +18,76 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     const bottomNavigationBarThemeData = BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.shifting,
+      elevation: 10,
       selectedItemColor: mainColour,
-      // unselectedItemColor: accentColour,
+      unselectedItemColor: Colors.grey,
+      showUnselectedLabels: false,
+      showSelectedLabels: true,
+      selectedIconTheme: IconThemeData(size: 26),
+      unselectedIconTheme: IconThemeData(size: 24),
+      landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
     );
 
     final materialLightTheme = ThemeData(
-      appBarTheme: const AppBarTheme(
-        color: mainColour,
-      ),
-      bottomNavigationBarTheme: bottomNavigationBarThemeData,
       colorScheme: const ColorScheme.light().copyWith(
         primary: mainColour,
         secondary: accentColour,
-        //FAB Icon Colour:
-        // onSecondary: Colors.red,
       ),
+      appBarTheme: const AppBarTheme(color: mainColour),
+      bottomNavigationBarTheme: bottomNavigationBarThemeData,
+      chipTheme: const ChipThemeData(backgroundColor: accentColour),
+      inputDecorationTheme: const InputDecorationTheme(
+        hintStyle: TextStyle(color: Colors.white),
+        prefixIconColor: Colors.white,
+        suffixIconColor: Colors.white,
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.black, //text colour
+          textStyle: const TextStyle(fontSize: 20),
+          side: const BorderSide(color: Colors.black26),
+        ),
+      ),
+      cardColor: blueColour, //colour for the Inventory tab top stuff
     );
 
-    final materialDarkTheme = ThemeData(
-      appBarTheme: const AppBarTheme(
-        color: mainColour,
-      ),
-      bottomNavigationBarTheme: bottomNavigationBarThemeData,
+    final materialDarkTheme = ThemeData.dark().copyWith(
       colorScheme: const ColorScheme.dark().copyWith(
         primary: mainColour,
         secondary: accentColour,
       ),
+      appBarTheme: const AppBarTheme(color: mainColour),
+      bottomNavigationBarTheme: bottomNavigationBarThemeData,
+      chipTheme: const ChipThemeData(backgroundColor: Colors.white10),
+      inputDecorationTheme: const InputDecorationTheme(),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.white, //text colour
+          textStyle: const TextStyle(fontSize: 20),
+          side: const BorderSide(color: Colors.white38),
+        ),
+      ),
       dividerColor: Colors.white.withOpacity(0.2),
     );
 
-    const cupertinoTheme = CupertinoThemeData(
-      primaryColor: CupertinoDynamicColor.withBrightness(
-        color: mainColour,
-        darkColor: mainColour,
-      ),
-    );
-
-    return PlatformProvider(
-      settings: PlatformSettingsData(
-        //TODO: Remove this, it's only for debugging
-        platformStyle: const PlatformStyleData(android: _debugPlatformStyle),
-      ),
-      builder: (context) => PlatformSnackApp(
-        scaffoldMessengerKey: snackbarKey,
-        supportedLocales: L10n.all,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        title: "Vanir IMS",
-        materialTheme: materialLightTheme,
-        materialDarkTheme: materialDarkTheme,
-        materialThemeMode: ThemeMode.system,
-        cupertinoTheme: cupertinoTheme,
-        home: const TabbedView(),
-      ),
+    return MaterialApp(
+      scaffoldMessengerKey: snackbarKey,
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      title: "Vanir IMS",
+      theme: materialLightTheme,
+      darkTheme: materialDarkTheme,
+      themeMode: ThemeMode.system,
+      home: const TabbedView(),
     );
   }
 }
