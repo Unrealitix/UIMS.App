@@ -162,9 +162,17 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Chip(label: Text(_scannerModeString)),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Chip(
+                label: Text(_scannerModeString),
+                backgroundColor: isDark(context) ? Color(0xFF303030) : accentColour
+                // labelStyle: TextStyle(color: Colors.white),
+                //backgroundColor: isDark(context) ? Color.fromRGBO(48, 48, 48, 1) : Colors.white,
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
@@ -176,21 +184,21 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
                 activeIcon: Icons.close,
                 children: [
                   SpeedDialChild(
-                    child: const Icon(Icons.fiber_new_outlined),
+                    child: const Icon(Icons.playlist_add_check),
                     label: AppLocalizations.of(context)!.scanModeLabelNewItem,
                     onTap: () => setState(() {
                       scannerMode = _ScannerMode.newItem;
                     }),
                   ),
                   SpeedDialChild(
-                    child: const Icon(Icons.add),
+                    child: const Icon(Icons.playlist_add),
                     label: AppLocalizations.of(context)!.scanModeLabelAddition,
                     onTap: () => setState(() {
                       scannerMode = _ScannerMode.addition;
                     }),
                   ),
                   SpeedDialChild(
-                    child: const Icon(Icons.remove),
+                    child: const Icon(Icons.playlist_remove),
                     label:
                         AppLocalizations.of(context)!.scanModeLabelSubtraction,
                     onTap: () => setState(() {
