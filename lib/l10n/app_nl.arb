@@ -1,0 +1,63 @@
+{
+	"appName": "Vanir IMS",
+
+	"dialogCancel": "Annuleren",
+	"dialogOk": "OK",
+	"dialogYes": "Ja",
+	"dialogNo": "Nee",
+	"dialogEdit": "Bewerken",
+	"dialogClose": "Sluiten",
+	"dialogCreate": "Aanmaken",
+	"dialogSave": "Opslaan",
+
+
+	"tabScanLabel": "Scan",
+	"tabScanTooltip": "Scan nieuwe producten naar het inventaris",
+
+	"tabInventoryLabel": "Inventaris",
+	"tabInventoryTooltip": "Bekijk en beheer uw inventaris",
+
+
+	"scanModeHintNewItem": "Camera over barcode voeg toe aan inventaris",
+	"scanModeHintAddition": "Camera over barcode om aantal met 1 te verhogen",
+	"scanModeHintSubtraction": "Camera over barcode om aantal met 1 te verlagen",
+
+	"scanSwitchCameraTooltip": "Wissel camera",
+	"scanToggleFlashTooltip": "Schakel flits in/uit",
+
+	"scanSwitchModeTooltip": "Wissel scan modus",
+	"scanModeLabelNewItem": "Nieuw item",
+	"scanModeLabelAddition": "Toevoegen",
+	"scanModeLabelSubtraction": "Verwijderen",
+
+
+	"inventoryListItemSubtitle": "SKU: {sku}",
+	"inventoryListItemDecreaseQuantityTooltip": "Verlaag aantal met 1",
+	"inventoryListItemSpecificQuantityTooltip": "Verander aantal naar specifiek getal",
+	"inventoryListItemIncreaseQuantityTooltip": "Verhoog aantal met 1",
+
+	"inventoryFABTooltip": "Voeg nieuw item toe",
+
+	"quickQuantityDialogTitle": "Verander Aantal",
+	"quickQuantityDialogHint": "Aantal",
+	"quickQuantityDialogLabel": "Voeer een aantal in",
+	"quickQuantityDialogCounterText": "Vorige hoeveelheid: {initial}",
+
+	"itemPropertyName": "Naam",
+	"itemPropertySKU": "SKU",
+	"itemPropertyQuantity": "Aantal",
+	"itemPropertyBarcode": "Barcode",
+	"itemPropertySupplier": "Leverancier",
+	"itemPropertyDescription": "Beschrijving",
+
+
+	"itemNewDialogTitle": "Nieuw Item",
+	"itemEditDialogTitle": "Bewerk Item",
+	"itemNewDialogNameEmptyWarning": "Naam mag niet leeg zijn",
+	"itemNewDialogSKUEmptyWarning": "SKU mag niet leeg zijn",
+	"itemEditDialogDeleteItemButton": "Verwijder Item",
+
+	"itemListSearchbarHint": "Zoeken",
+	"itemListFilterButtonTooltip": "Filter",
+	"itemListSortButtonTooltip": "Sorteer"
+}

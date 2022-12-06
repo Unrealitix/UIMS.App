@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import '../main.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../models/inventory_item.dart';
 import '../utils.dart';
 
@@ -56,15 +57,14 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
     super.dispose();
   }
 
-  //TODO: These are too long. They shouldn't be longer than 30 characters
   String get _scannerModeString {
     switch (scannerMode) {
       case _ScannerMode.newItem:
-        return "Scan a barcode to add a new item to the inventory";
+        return AppLocalizations.of(context)!.scanModeHintNewItem;
       case _ScannerMode.addition:
-        return "Scan a barcode to increase item inventory quantity";
+        return AppLocalizations.of(context)!.scanModeHintAddition;
       case _ScannerMode.subtraction:
-        return "Scan a barcode to reduce item inventory quantity";
+        return AppLocalizations.of(context)!.scanModeHintSubtraction;
     }
   }
 
@@ -138,7 +138,8 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
                 children: [
                   //TODO: if has multiple cameras
                   IconButton(
-                    tooltip: "Switch camera",
+                    tooltip:
+                        AppLocalizations.of(context)!.scanSwitchCameraTooltip,
                     onPressed: () {
                       scannerController.switchCamera();
                     },
@@ -146,7 +147,8 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
                   ),
                   if (hasTorch)
                     IconButton(
-                      tooltip: "Toggle flashlight",
+                      tooltip:
+                          AppLocalizations.of(context)!.scanToggleFlashTooltip,
                       onPressed: () => setState(() {
                         scannerController.toggleTorch();
                       }),
@@ -177,27 +179,28 @@ class _ManagedScannerWidgetState extends State<ManagedScannerWidget> {
             child: Align(
               alignment: Alignment.bottomRight,
               child: SpeedDial(
-                tooltip: "Switch camera scanning mode",
+                tooltip: AppLocalizations.of(context)!.scanSwitchModeTooltip,
                 icon: Icons.party_mode, //TODO: Find a better icon for this
                 activeIcon: Icons.close,
                 children: [
                   SpeedDialChild(
                     child: const Icon(Icons.playlist_add_check),
-                    label: "Add new item to the inventory",
+                    label: AppLocalizations.of(context)!.scanModeLabelNewItem,
                     onTap: () => setState(() {
                       scannerMode = _ScannerMode.newItem;
                     }),
                   ),
                   SpeedDialChild(
                     child: const Icon(Icons.playlist_add),
-                    label: "Increase inventory quantity",
+                    label: AppLocalizations.of(context)!.scanModeLabelAddition,
                     onTap: () => setState(() {
                       scannerMode = _ScannerMode.addition;
                     }),
                   ),
                   SpeedDialChild(
                     child: const Icon(Icons.playlist_remove),
-                    label: "Reduce inventory quantity",
+                    label:
+                        AppLocalizations.of(context)!.scanModeLabelSubtraction,
                     onTap: () => setState(() {
                       scannerMode = _ScannerMode.subtraction;
                     }),
