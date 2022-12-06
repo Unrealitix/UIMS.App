@@ -20,7 +20,7 @@ class _InventoryState extends State<Inventory> {
   @override
   void initState() {
     super.initState();
-    print("Inventory::initState");
+    debugPrint("Inventory::initState");
 
     items = [
       // Item(name: "Bread", quantity: 1, sku: "no.1"),
@@ -40,7 +40,7 @@ class _InventoryState extends State<Inventory> {
   @override
   Widget build(BuildContext context) {
     //TODO: Use FutureBuilder to show a loading indicator while waiting for the items to load
-    print("Inventory::build");
+    debugPrint("Inventory::build");
     const double topBarElevation = 2;
     const double roundedCorners = 4;
 
@@ -120,7 +120,7 @@ class _InventoryState extends State<Inventory> {
                               fillColor: Theme.of(context).cardColor,
                               child: const Icon(Icons.filter_alt),
                               onPressed: () {
-                                print("Filter button pressed");
+                                debugPrint("Filter button pressed");
                               },
                             ),
                           ),
@@ -144,7 +144,7 @@ class _InventoryState extends State<Inventory> {
                               fillColor: Theme.of(context).cardColor,
                               child: const Icon(Icons.sort),
                               onPressed: () {
-                                print("Sort button pressed");
+                                debugPrint("Sort button pressed");
                               },
                             ),
                           ),
@@ -189,7 +189,7 @@ class _InventoryState extends State<Inventory> {
                                       int? i = await _showQuickQuantityDialog(
                                           context,
                                           items[index].quantity.toString());
-                                      print(i);
+                                      debugPrint("$i");
                                       if (i == null) return; //Dialog cancelled
                                       setState(() {
                                         items[index].changeQuantityTo(i);
@@ -214,7 +214,7 @@ class _InventoryState extends State<Inventory> {
                               ],
                             ),
                             onTap: () {
-                              print("Tapped");
+                              debugPrint("Tapped");
                               _showItemDetails(context, items[index]);
                             },
                           ),

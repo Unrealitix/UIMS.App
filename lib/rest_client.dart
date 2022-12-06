@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 typedef Client = http.Client;
@@ -20,7 +21,7 @@ class RestClient {
     Uri apiUri = Uri.parse(api);
     Uri url = Uri.parse("$urlBase/$apiUri");
     // Uri url = Uri.parse("$urlBase/$apiUri");
-    print("url: '$url'");
+    debugPrint("url: '$url'");
     return url;
   }
 

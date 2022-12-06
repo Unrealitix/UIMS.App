@@ -290,7 +290,7 @@ class Item {
     if (resp.isEmpty) {
       showSnackbar("Server responded bad");
     }
-    print("resp: $resp");
+    debugPrint("resp: $resp");
     showSnackbar("Successfully added item");
   }
 
@@ -313,7 +313,7 @@ class Item {
     /*if (resp.isEmpty) {
       // showSnackbar("Server responded bad");
     }*/
-    print("resp: $resp");
+    debugPrint("resp: $resp");
     showSnackbar("Successfully changed item");
   }
 
@@ -335,7 +335,7 @@ class Item {
     /*if (resp.isEmpty) {
       // showSnackbar("Server responded bad");
     }*/
-    print("resp: $resp");
+    debugPrint("resp: $resp");
     showSnackbar("Successfully deleted item");
   }
 }

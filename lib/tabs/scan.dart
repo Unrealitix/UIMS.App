@@ -27,7 +27,7 @@ class _ScanState extends State<Scan> {
     facing: CameraFacing.back,
     detectionSpeed: DetectionSpeed.noDuplicates,
     onPermissionSet: (bool hasPermissions) {
-      print("ScanTab::onPermissionSet: $hasPermissions");
+      debugPrint("ScanTab::onPermissionSet: $hasPermissions");
       //TODO: This is being worked on and improved in the library.
       // Waiting for the library to be updated.
     },
@@ -46,13 +46,13 @@ class _ScanState extends State<Scan> {
   @override
   void initState() {
     super.initState();
-    print("ScanTab::initState");
+    debugPrint("ScanTab::initState");
     player.setReleaseMode(ReleaseMode.stop);
   }
 
   @override
   void dispose() {
-    print("ScanTab::dispose");
+    debugPrint("ScanTab::dispose");
     scannerController.dispose();
     player.dispose();
 
@@ -72,7 +72,7 @@ class _ScanState extends State<Scan> {
 
   @override
   Widget build(BuildContext context) {
-    print("ScanTab::build");
+    debugPrint("ScanTab::build");
     return Stack(
       children: [
         MobileScanner(
@@ -83,7 +83,7 @@ class _ScanState extends State<Scan> {
             if (text == null) return;
             if (isPopupCurrentlyOpen) return;
             if (text == lastScannedCode) return;
-            print("scanned text: $text");
+            debugPrint("scanned text: $text");
 
             lastScannedCode = text;
             isPopupCurrentlyOpen = true;
@@ -116,9 +116,9 @@ class _ScanState extends State<Scan> {
             _lastScannedCodeDelayedReset();
           },
           onStart: (MobileScannerArguments? arguments) {
-            print("CameraComponent::onStart");
+            debugPrint("CameraComponent::onStart");
             if (arguments == null) return;
-            print("hasTorch: ${arguments.hasTorch}");
+            debugPrint("hasTorch: ${arguments.hasTorch}");
             setState(() {
               hasTorch = arguments.hasTorch;
             });
@@ -218,7 +218,7 @@ class _ScanState extends State<Scan> {
     Item? item = await Item.dialogNewItem(context, barcode: text);
 
     if (item == null || item.name.isEmpty || item.sku.isEmpty) {
-      print("item was null");
+      debugPrint("item was null");
       return;
     }
 
