@@ -85,7 +85,7 @@ class _InventoryState extends State<Inventory> {
                             controller: _searchController,
                             textInputAction: TextInputAction.search,
                             decoration: InputDecoration(
-                              filled: true,
+                              filled: true, //TODO: Fix searchbar background colour in light mode
                               fillColor: Theme.of(context).cardColor,
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
