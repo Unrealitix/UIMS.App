@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -239,7 +240,8 @@ class _InventoryState extends State<Inventory> {
                                       });
                                     },
                                     child: Text(
-                                      items[index].quantity.toString(),
+                                      NumberFormat()
+                                          .format(items[index].quantity),
                                     ),
                                   ),
                                 ),
