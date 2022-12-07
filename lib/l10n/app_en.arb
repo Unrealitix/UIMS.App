@@ -234,5 +234,10 @@
 	"itemSortOptionQuantityDescending": "Quantity (High-Low)",
 	"@itemSortOptionQuantityDescending": {
 		"description": "The label of the sort option to sort the item list by quantity (High-Low)"
+	},
+
+	"duplicateBarcodeDialogTitle": "Multiple items with the same barcode",
+	"@duplicateBarcodeDialogTitle": {
+		"description": "The title of the dialog to show when a barcode is scanned that is associated with multiple items"
 	}
 }

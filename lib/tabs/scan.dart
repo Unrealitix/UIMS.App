@@ -92,33 +92,39 @@ class _ScanState extends State<Scan> {
 
             switch (scannerMode) {
               case _ScannerMode.newItem:
-                //TODO: Test & Tweak this more
-                Item? i = Item.getItemByBarcodeDialog(context, text);
-                if (i == null) {
+                //CHeck if item isn't already in inventory
+                var items =
+                    Item.globalItems.where((item) => item.barcode == text);
+                if (items.isEmpty) {
+                  //if it's not in the inv already, add it
                   player.play(newBeep);
                   await _dialogNewScannedItem(context, text);
                 } else {
+                  //otherwise check if the barcode
                   player.play(existingBeep);
-                  await Item.dialogEditItem(context, i);
+                  Item? i = await Item.getItemByBarcodeDialog(context, text);
+                  if (i != null) {
+                    await Item.dialogEditItem(context, i);
+                  }
                 }
 
                 break;
               case _ScannerMode.addition:
-                player.play(existingBeep);
-                Item? i = Item.getItemByBarcodeDialog(context, text);
+                Item? i = await Item.getItemByBarcodeDialog(context, text);
                 if (i == null) {
                   showSnackbar("Item not found");
                   break;
                 }
+                player.play(existingBeep);
                 i.changeQuantityTo(i.quantity + 1);
                 break;
               case _ScannerMode.subtraction:
-                player.play(existingBeep);
-                Item? i = Item.getItemByBarcodeDialog(context, text);
+                Item? i = await Item.getItemByBarcodeDialog(context, text);
                 if (i == null) {
                   showSnackbar("Item not found");
                   break;
                 }
+                player.play(existingBeep);
                 i.changeQuantityTo(max(i.quantity - 1, 0));
                 break;
             }

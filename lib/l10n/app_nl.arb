@@ -68,5 +68,7 @@
 	"itemSortOptionAlphabeticalAscending": "Alfabetisch (A-Z)",
 	"itemSortOptionAlphabeticalDescending": "Alfabetisch (Z-A)",
 	"itemSortOptionQuantityAscending": "Aantal (Laag-Hoog)",
-	"itemSortOptionQuantityDescending": "Aantal (Hoog-Laag)"
+	"itemSortOptionQuantityDescending": "Aantal (Hoog-Laag)",
+
+	"duplicateBarcodeDialogTitle": "Meerdere items met dezelfde barcode"
 }
