@@ -301,9 +301,9 @@ class _InventoryState extends State<Inventory> {
   }
 
   Future<void> _refreshList() async {
-    List<Item> newItems = await Item.getItemsFromServer();
+    await Item.getItemsFromServer();
     setState(() {
-      items = newItems;
+      items = Item.globalItems;
     });
     _sortItems();
   }
@@ -407,10 +407,11 @@ class _InventoryState extends State<Inventory> {
   }
 
   void _showItemDetails(BuildContext context, Item item) {
-    //TODO: Improve styling here
     showDialog(
       context: context,
       builder: (context) {
+        const padding = SizedBox(height: 8);
+        const bold = TextStyle(fontWeight: FontWeight.bold);
         return AlertDialog(
           title: Text(item.name),
           content: SingleChildScrollView(
@@ -419,18 +420,52 @@ class _InventoryState extends State<Inventory> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                    "${AppLocalizations.of(context)!.itemPropertySKU}: ${item.sku}"),
+                  AppLocalizations.of(context)!.itemPropertySKU,
+                  style: bold,
+                ),
+                Text(item.sku),
+                padding,
                 Text(
-                    "${AppLocalizations.of(context)!.itemPropertyQuantity}: ${item.quantity}"),
+                  AppLocalizations.of(context)!.itemPropertyQuantity,
+                  style: bold,
+                ),
+                Text(item.quantity.toString()),
+                padding,
                 if (item.barcode != null && item.barcode!.isNotEmpty)
-                  Text(
-                      "${AppLocalizations.of(context)!.itemPropertyBarcode}: ${item.barcode}"),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.itemPropertyBarcode,
+                        style: bold,
+                      ),
+                      Text(item.barcode!),
+                    ],
+                  ),
+                padding,
                 if (item.supplier != null && item.supplier!.isNotEmpty)
-                  Text(
-                      "${AppLocalizations.of(context)!.itemPropertySupplier}: ${item.supplier}"),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.itemPropertySupplier,
+                        style: bold,
+                      ),
+                      Text(item.supplier!),
+                    ],
+                  ),
+                padding,
                 if (item.description != null && item.description!.isNotEmpty)
-                  Text(
-                      "${AppLocalizations.of(context)!.itemPropertyDescription}: ${item.description}"),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.itemPropertyDescription,
+                        style: bold,
+                      ),
+                      Text(item.description!),
+                    ],
+                  ),
               ],
             ),
           ),
