@@ -213,5 +213,27 @@
 	"itemListSortButtonTooltip": "Sort",
 	"@itemListSortButtonTooltip": {
 		"description": "The tooltip of the button to sort the item list"
+	},
+
+	"itemSortDialogTitle": "Sort",
+	"@itemSortDialogTitle": {
+		"description": "The title of the dialog to sort the item list"
+	},
+
+	"itemSortOptionAlphabeticalAscending": "Alphabetical (A-Z)",
+	"@itemSortOptionAlphabeticalAscending": {
+		"description": "The label of the sort option to sort the item list alphabetically (A-Z)"
+	},
+	"itemSortOptionAlphabeticalDescending": "Alphabetical (Z-A)",
+	"@itemSortOptionAlphabeticalDescending": {
+		"description": "The label of the sort option to sort the item list alphabetically (Z-A)"
+	},
+	"itemSortOptionQuantityAscending": "Quantity (Low-High)",
+	"@itemSortOptionQuantityAscending": {
+		"description": "The label of the sort option to sort the item list by quantity (Low-High)"
+	},
+	"itemSortOptionQuantityDescending": "Quantity (High-Low)",
+	"@itemSortOptionQuantityDescending": {
+		"description": "The label of the sort option to sort the item list by quantity (High-Low)"
 	}
 }

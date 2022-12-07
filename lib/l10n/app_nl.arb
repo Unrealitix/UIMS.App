@@ -62,5 +62,11 @@
 
 	"itemListSearchbarHint": "Zoeken",
 	"itemListFilterButtonTooltip": "Filter",
-	"itemListSortButtonTooltip": "Sorteer"
+	"itemListSortButtonTooltip": "Sorteer",
+
+	"itemSortDialogTitle": "Sorteer",
+	"itemSortOptionAlphabeticalAscending": "Alfabetisch (A-Z)",
+	"itemSortOptionAlphabeticalDescending": "Alfabetisch (Z-A)",
+	"itemSortOptionQuantityAscending": "Aantal (Laag-Hoog)",
+	"itemSortOptionQuantityDescending": "Aantal (Hoog-Laag)"
 }

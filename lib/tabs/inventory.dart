@@ -3,8 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:unrealitix_ims/main.dart';
 
 import '../models/inventory_item.dart';
+
+enum _SortBy {
+  alphabeticalAscending,
+  alphabeticalDescending,
+  quantityAscending,
+  quantityDescending,
+}
 
 class Inventory extends StatefulWidget {
   const Inventory({super.key});
@@ -16,6 +24,10 @@ class Inventory extends StatefulWidget {
 class _InventoryState extends State<Inventory> {
   late List<Item> items;
   final TextEditingController _searchController = TextEditingController();
+
+  _SortBy sortBy = _SortBy.alphabeticalAscending;
+
+  bool filterOn = false;
 
   @override
   void initState() {
@@ -117,10 +129,17 @@ class _InventoryState extends State<Inventory> {
                                     BorderRadius.circular(roundedCorners),
                               ),
                               elevation: topBarElevation,
-                              fillColor: Theme.of(context).cardColor,
-                              child: const Icon(Icons.filter_alt),
+                              fillColor: filterOn
+                                  ? mainColour
+                                  : Theme.of(context).cardColor,
+                              child: filterOn
+                                  ? const Icon(Icons.filter_alt)
+                                  : const Icon(Icons.filter_alt_off),
                               onPressed: () {
                                 debugPrint("Filter button pressed");
+                                setState(() {
+                                  filterOn = !filterOn;
+                                });
                               },
                             ),
                           ),
@@ -144,7 +163,7 @@ class _InventoryState extends State<Inventory> {
                               fillColor: Theme.of(context).cardColor,
                               child: const Icon(Icons.sort),
                               onPressed: () {
-                                debugPrint("Sort button pressed");
+                                _changeSortDialog(context);
                               },
                             ),
                           ),
@@ -400,6 +419,25 @@ class _InventoryState extends State<Inventory> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  void _changeSortDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.itemSortDialogTitle),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [],
+              ),
+            );
+          },
         );
       },
     );
