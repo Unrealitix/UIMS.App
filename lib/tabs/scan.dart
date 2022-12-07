@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -90,25 +92,34 @@ class _ScanState extends State<Scan> {
 
             switch (scannerMode) {
               case _ScannerMode.newItem:
-                player.play(newBeep);
-                //TODO: Implement existing item detection:
-                // if(item i is already in inventory) {
-                //   player.play(existingBeep);
-                //   dialogEditItem(i);
-                //   return;
-                // }
+                //TODO: Test & Tweak this more
+                Item? i = Item.getItemByBarcodeDialog(context, text);
+                if (i == null) {
+                  player.play(newBeep);
+                  await _dialogNewScannedItem(context, text);
+                } else {
+                  player.play(existingBeep);
+                  await Item.dialogEditItem(context, i);
+                }
 
-                await _dialogNewScannedItem(context, text);
                 break;
               case _ScannerMode.addition:
                 player.play(existingBeep);
-                showSnackbar("Addition mode not implemented yet");
-                //TODO: Implement addition mode
+                Item? i = Item.getItemByBarcodeDialog(context, text);
+                if (i == null) {
+                  showSnackbar("Item not found");
+                  break;
+                }
+                i.changeQuantityTo(i.quantity + 1);
                 break;
               case _ScannerMode.subtraction:
                 player.play(existingBeep);
-                showSnackbar("Subtraction mode not implemented yet");
-                //TODO: Implement subtraction mode
+                Item? i = Item.getItemByBarcodeDialog(context, text);
+                if (i == null) {
+                  showSnackbar("Item not found");
+                  break;
+                }
+                i.changeQuantityTo(max(i.quantity - 1, 0));
                 break;
             }
 

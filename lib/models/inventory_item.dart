@@ -35,7 +35,8 @@ class Item {
     changeItemOnServer(this);
   }
 
-  Map toJson() => {
+  Map toJson() =>
+      {
         "sku": sku,
         "quantity": quantity,
         "name": name,
@@ -57,15 +58,49 @@ class Item {
 
   static List<Item> globalItems = [];
 
-  static Item getItemByBarcodeDialog(BuildContext context, String barcode) {
-    // List<Item> options = getItemsByBarcodeFromServer(barcode);
-    //TODO: Implement this
-    throw UnimplementedError();
+  static Item? getItemByBarcodeDialog(BuildContext context, String barcode) {
+    //TODO: FINISH THIS
+    List<Item> items =
+    globalItems.where((item) => item.barcode == barcode).toList();
+    if (items.isEmpty) {
+      return null;
+    } else if (items.length == 1) {
+      return items.first;
+    } else {
+      showDialog<Item>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Multiple items with the same barcode"),
+            content: SingleChildScrollView(
+              child: ListBody(
+
+                //todo: onTap return
+                children: items.map((item) => Text(item.name)).toList(),
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.dialogCancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.dialogOk),
+                onPressed: () {
+                  Navigator.of(context).pop(items.first);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   ///Returns null if dialog was cancelled
-  static Future<Item?> dialogNewItem(
-    BuildContext context, {
+  static Future<Item?> dialogNewItem(BuildContext context, {
     String? barcode,
   }) async {
     return await dialogEditItem(
@@ -114,7 +149,7 @@ class Item {
                       initialValue: item.name,
                       decoration: InputDecoration(
                         labelText:
-                            AppLocalizations.of(context)!.itemPropertyName,
+                        AppLocalizations.of(context)!.itemPropertyName,
                       ),
                       textInputAction: TextInputAction.next,
                       textCapitalization: TextCapitalization.words,
@@ -141,7 +176,7 @@ class Item {
                       initialValue: item.sku,
                       decoration: InputDecoration(
                         labelText:
-                            AppLocalizations.of(context)!.itemPropertySKU,
+                        AppLocalizations.of(context)!.itemPropertySKU,
                       ),
                       textInputAction: TextInputAction.next,
                       onSaved: (String? s) => item.sku = (s ?? "").trim(),
@@ -163,7 +198,7 @@ class Item {
                     initialValue: item.barcode,
                     decoration: InputDecoration(
                       labelText:
-                          AppLocalizations.of(context)!.itemPropertyBarcode,
+                      AppLocalizations.of(context)!.itemPropertyBarcode,
                     ),
                     textInputAction: TextInputAction.next,
                     onSaved: (String? s) => item.barcode = s?.trim(),
@@ -172,7 +207,7 @@ class Item {
                     initialValue: item.supplier,
                     decoration: InputDecoration(
                       labelText:
-                          AppLocalizations.of(context)!.itemPropertySupplier,
+                      AppLocalizations.of(context)!.itemPropertySupplier,
                     ),
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.words,
@@ -182,7 +217,7 @@ class Item {
                     initialValue: item.description,
                     decoration: InputDecoration(
                       labelText:
-                          AppLocalizations.of(context)!.itemPropertyDescription,
+                      AppLocalizations.of(context)!.itemPropertyDescription,
                     ),
                     textInputAction: TextInputAction.newline,
                     textCapitalization: TextCapitalization.sentences,
@@ -202,7 +237,8 @@ class Item {
                         children: [
                           const Icon(Icons.warning),
                           Text(
-                              " ${AppLocalizations.of(context)!.itemEditDialogDeleteItemButton}"),
+                              " ${AppLocalizations.of(context)!
+                                  .itemEditDialogDeleteItemButton}"),
                         ],
                       ),
                       onPressed: () {
@@ -254,7 +290,7 @@ class Item {
   //rest: get
   static Future<void> getItemsFromServer() async {
     String resp = await RestClient().get("items").onError(
-      (HttpException error, StackTrace stackTrace) {
+          (HttpException error, StackTrace stackTrace) {
         showSnackbar("Network error: ${error.message}");
         return "network error";
       },
@@ -273,15 +309,10 @@ class Item {
     globalItems = json.map((e) => Item.fromJson(e)).toList();
   }
 
-  static List<Item> getItemsByBarcodeFromServer(String barcode) {
-    //TODO: Implement this
-    throw UnimplementedError();
-  }
-
   //rest: post
   static void sendNewItemToServer(Item item) async {
     String resp = await RestClient().post("items", jsonEncode(item)).onError(
-      (HttpException error, StackTrace stackTrace) {
+          (HttpException error, StackTrace stackTrace) {
         showSnackbar("Network error: ${error.message}");
         //TODO: 409 is a conflict, not a network error
         return "network error";
@@ -302,8 +333,8 @@ class Item {
   //rest: put
   static void changeItemOnServer(Item item) async {
     String resp =
-        await RestClient().put("items/${item.sku}", jsonEncode(item)).onError(
-      (HttpException error, StackTrace stackTrace) {
+    await RestClient().put("items/${item.sku}", jsonEncode(item)).onError(
+          (HttpException error, StackTrace stackTrace) {
         showSnackbar("Network error: ${error.message}");
         return "network error";
       },
@@ -325,7 +356,7 @@ class Item {
   //rest: delete
   static void deleteItemFromServer(Item item) async {
     String resp = await RestClient().delete("items/${item.sku}").onError(
-      (HttpException error, StackTrace stackTrace) {
+          (HttpException error, StackTrace stackTrace) {
         showSnackbar("Network error: ${error.message}");
         return "network error";
       },
