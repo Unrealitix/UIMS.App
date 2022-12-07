@@ -84,6 +84,17 @@ class _ScanState extends State<Scan> {
     }
   }
 
+  AssetImage get _scannerModeImage {
+    switch (scannerMode) {
+      case _ScannerMode.newItem:
+        return const AssetImage("assets/crosshairs/new_edit.png");
+      case _ScannerMode.addition:
+        return const AssetImage("assets/crosshairs/plus.png");
+      case _ScannerMode.subtraction:
+        return const AssetImage("assets/crosshairs/minus.png");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     debugPrint("ScanTab::build");
@@ -259,6 +270,15 @@ class _ScanState extends State<Scan> {
                   ),
                 ],
               ),
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(64.0),
+            child: Image(
+              image: _scannerModeImage,
+              fit: BoxFit.contain,
             ),
           ),
         ),

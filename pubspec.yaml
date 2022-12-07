@@ -94,6 +94,9 @@ flutter:
     - assets/sounds/Scan_new_item.mp3
     - assets/sounds/Scan_existing_item.mp3
     - assets/icons/playlist_subtract4.png
+    - assets/crosshairs/minus.png
+    - assets/crosshairs/new_edit.png
+    - assets/crosshairs/plus.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
