@@ -190,13 +190,13 @@ class _ScanState extends State<Scan> {
             alignment: Alignment.bottomRight,
             child: SpeedDial(
               tooltip: AppLocalizations.of(context)!.scanSwitchModeTooltip,
-              //TODO: Find a better icon for this:
               icon: Icons.party_mode,
+              //TODO: Put the current mode icon as a child, bottom right
               activeIcon: Icons.close,
               spacing: 8,
               children: [
                 SpeedDialChild(
-                  child: const Icon(Icons.playlist_add_check),
+                  child: const Icon(Icons.edit_note),
                   label: AppLocalizations.of(context)!.scanModeLabelNewItem,
                   onTap: () => setState(() {
                     scannerMode = _ScannerMode.newItem;
