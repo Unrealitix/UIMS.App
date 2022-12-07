@@ -15,8 +15,8 @@ class Item {
   int quantity;
   Group? group;
   String? barcode;
-  String? description;
   String? supplier;
+  String? description;
 
   bool toDelete = false;
 
@@ -26,8 +26,8 @@ class Item {
     required this.quantity,
     this.group,
     this.barcode,
-    this.description,
     this.supplier,
+    this.description,
   });
 
   void changeQuantityTo(int newQuantity) {
@@ -40,8 +40,8 @@ class Item {
         "quantity": quantity,
         "name": name,
         "barcode": barcode,
-        "description": description,
         "supplier": supplier,
+        "description": description,
       };
 
   static Item fromJson(Map<String, dynamic> json) {
@@ -50,10 +50,12 @@ class Item {
       quantity: json["quantity"] as int,
       name: json["name"] as String,
       barcode: json["barcode"] as String?,
-      description: json["description"] as String?,
       supplier: json["supplier"] as String?,
+      description: json["description"] as String?,
     );
   }
+
+  static List<Item> globalItems = [];
 
   static Item getItemByBarcodeDialog(BuildContext context, String barcode) {
     // List<Item> options = getItemsByBarcodeFromServer(barcode);
@@ -250,7 +252,7 @@ class Item {
   ///======================================================================///
 
   //rest: get
-  static Future<List<Item>> getItemsFromServer() async {
+  static Future<void> getItemsFromServer() async {
     String resp = await RestClient().get("items").onError(
       (HttpException error, StackTrace stackTrace) {
         showSnackbar("Network error: ${error.message}");
@@ -268,7 +270,7 @@ class Item {
 
     List<dynamic> json = jsonDecode(resp);
 
-    return json.map((e) => Item.fromJson(e)).toList();
+    globalItems = json.map((e) => Item.fromJson(e)).toList();
   }
 
   static List<Item> getItemsByBarcodeFromServer(String barcode) {

@@ -23,7 +23,7 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
-  late List<Item> items;
+  List<Item> items = [];
   final TextEditingController _searchController = TextEditingController();
 
   _SortBy sortBy = _SortBy.alphabeticalAscending;
@@ -49,12 +49,6 @@ class _InventoryState extends State<Inventory> {
   void initState() {
     super.initState();
     debugPrint("Inventory::initState");
-
-    items = [
-      // Item(name: "Bread", quantity: 1, sku: "no.1"),
-      // Item(name: "Milk", quantity: 1, sku: "no.2"),
-      // Item(name: "Eggs", quantity: 1, sku: "no.3"),
-    ];
 
     SharedPreferences.getInstance().then((SharedPreferences prefs) {
       setState(() {
