@@ -29,6 +29,21 @@ class _InventoryState extends State<Inventory> {
 
   bool filterOn = false;
 
+  String sortByString(_SortBy sb) {
+    switch (sb) {
+      case _SortBy.alphabeticalAscending:
+        return AppLocalizations.of(context)!
+            .itemSortOptionAlphabeticalAscending;
+      case _SortBy.alphabeticalDescending:
+        return AppLocalizations.of(context)!
+            .itemSortOptionAlphabeticalDescending;
+      case _SortBy.quantityAscending:
+        return AppLocalizations.of(context)!.itemSortOptionQuantityAscending;
+      case _SortBy.quantityDescending:
+        return AppLocalizations.of(context)!.itemSortOptionQuantityDescending;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -85,7 +100,8 @@ class _InventoryState extends State<Inventory> {
                             controller: _searchController,
                             textInputAction: TextInputAction.search,
                             decoration: InputDecoration(
-                              filled: true, //TODO: Fix searchbar background colour in light mode
+                              filled: true,
+                              //TODO: Fix searchbar background colour in light mode:
                               fillColor: Theme.of(context).cardColor,
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -283,6 +299,27 @@ class _InventoryState extends State<Inventory> {
     setState(() {
       items = newItems;
     });
+    _sortItems();
+  }
+
+  Future<void> _sortItems() async {
+    debugPrint("Sorting items by $sortBy");
+    setState(() {
+      switch (sortBy) {
+        case _SortBy.alphabeticalAscending:
+          items.sort((a, b) => a.name.compareTo(b.name));
+          break;
+        case _SortBy.alphabeticalDescending:
+          items.sort((a, b) => b.name.compareTo(a.name));
+          break;
+        case _SortBy.quantityAscending:
+          items.sort((a, b) => a.quantity.compareTo(b.quantity));
+          break;
+        case _SortBy.quantityDescending:
+          items.sort((a, b) => b.quantity.compareTo(a.quantity));
+          break;
+      }
+    });
   }
 
   Future<int?> _showQuickQuantityDialog(
@@ -434,7 +471,24 @@ class _InventoryState extends State<Inventory> {
               title: Text(AppLocalizations.of(context)!.itemSortDialogTitle),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [],
+                children: [
+                  for (_SortBy sb in _SortBy.values)
+                    RadioListTile<_SortBy>(
+                      title: Text(sortByString(sb)),
+                      value: sb,
+                      groupValue: sortBy,
+                      onChanged: (_SortBy? value) {
+                        sortBy = value!;
+                        _sortItems();
+                        Navigator.of(context).pop();
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                    ),
+                ],
               ),
             );
           },
