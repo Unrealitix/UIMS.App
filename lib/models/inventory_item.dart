@@ -74,26 +74,32 @@ class Item {
           return AlertDialog(
             title:
                 Text(AppLocalizations.of(context)!.duplicateBarcodeDialogTitle),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  for (Item i in items)
-                    RadioListTile<Item>(
-                      title: Text(i.name),
-                      subtitle: Text(i.sku),
-                      value: i,
-                      groupValue: null,
-                      onChanged: (Item? value) {
-                        Navigator.of(context).pop();
-                        ret = i;
-                      },
-                      contentPadding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
+            content: RawScrollbar(
+              thickness: 2,
+              interactive: false,
+              thumbVisibility: true,
+              thumbColor: Colors.grey.withOpacity(0.5),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (Item i in items)
+                      RadioListTile<Item>(
+                        title: Text(i.name),
+                        subtitle: Text(i.sku),
+                        value: i,
+                        groupValue: null,
+                        onChanged: (Item? value) {
+                          Navigator.of(context).pop();
+                          ret = i;
+                        },
+                        contentPadding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
             actions: [
@@ -130,8 +136,9 @@ class Item {
   ///Returns null if dialog was cancelled
   static Future<Item?> dialogEditItem(BuildContext context, Item item) async {
     final formKey = GlobalKey<FormState>();
-    final nameKey = GlobalKey<FormFieldState>();
-    final skuKey = GlobalKey<FormFieldState>();
+    final nameVerificationKey = GlobalKey<FormFieldState>();
+    final skuVerificationKey = GlobalKey<FormFieldState>();
+    final quantityVerificationKey = GlobalKey<FormFieldState>();
     bool acceptReturn = false;
 
     bool isNew = item.sku.isEmpty;
@@ -148,120 +155,156 @@ class Item {
       builder: (context) {
         return AlertDialog(
           title: Text(title),
-          content: SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              child: Column(
-                //To align the delete button to the right:
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Focus(
-                    child: TextFormField(
-                      key: nameKey,
-                      autofocus: isNew,
-                      initialValue: item.name,
+          content: RawScrollbar(
+            thickness: 2,
+            interactive: false,
+            thumbVisibility: true,
+            thumbColor: Colors.grey.withOpacity(0.5),
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  //To align the delete button to the right:
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Focus(
+                      canRequestFocus: false,
+                      child: TextFormField(
+                        key: nameVerificationKey,
+                        autofocus: isNew,
+                        initialValue: item.name,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.itemPropertyName,
+                        ),
+                        textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.words,
+                        onSaved: (String? s) => item.name = (s ?? "").trim(),
+                        validator: (String? s) {
+                          if (s == null || s.isEmpty) {
+                            return AppLocalizations.of(context)!
+                                .itemNewDialogNameEmptyWarning;
+                          }
+                          return null;
+                        },
+                      ),
+                      onFocusChange: (bool hasFocus) {
+                        if (!hasFocus) {
+                          nameVerificationKey.currentState?.validate();
+                        }
+                      },
+                    ),
+                    Focus(
+                      canRequestFocus: false,
+                      child: TextFormField(
+                        key: skuVerificationKey,
+                        initialValue: item.sku,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.itemPropertySKU,
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onSaved: (String? s) => item.sku = (s ?? "").trim(),
+                        validator: (String? s) {
+                          if (s == null || s.isEmpty) {
+                            return AppLocalizations.of(context)!
+                                .itemNewDialogSKUEmptyWarning;
+                          }
+                          return null;
+                        },
+                      ),
+                      onFocusChange: (bool hasFocus) {
+                        if (!hasFocus) {
+                          skuVerificationKey.currentState?.validate();
+                        }
+                      },
+                    ),
+                    Focus(
+                      canRequestFocus: false,
+                      child: TextFormField(
+                        key: quantityVerificationKey,
+                        initialValue: item.quantity.toString(),
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!
+                              .itemPropertyQuantity,
+                        ),
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.number,
+                        onSaved: (String? s) =>
+                            item.quantity = int.tryParse(s!) ?? 1,
+                        validator: (String? s) {
+                          if (s == null || s.isEmpty) {
+                            return AppLocalizations.of(context)!
+                                .itemNewDialogQuantityEmptyWarning;
+                          }
+                          if (int.tryParse(s) == null) {
+                            return AppLocalizations.of(context)!
+                                .itemNewDialogQuantityInvalidWarning;
+                          }
+                          return null;
+                        },
+                      ),
+                      onFocusChange: (bool hasFocus) {
+                        if (!hasFocus) {
+                          quantityVerificationKey.currentState?.validate();
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: item.barcode,
                       decoration: InputDecoration(
                         labelText:
-                            AppLocalizations.of(context)!.itemPropertyName,
+                            AppLocalizations.of(context)!.itemPropertyBarcode,
+                      ),
+                      textInputAction: TextInputAction.next,
+                      onSaved: (String? s) => item.barcode = s?.trim(),
+                    ),
+                    TextFormField(
+                      initialValue: item.supplier,
+                      decoration: InputDecoration(
+                        labelText:
+                            AppLocalizations.of(context)!.itemPropertySupplier,
                       ),
                       textInputAction: TextInputAction.next,
                       textCapitalization: TextCapitalization.words,
-                      onFieldSubmitted: (String s) =>
-                          FocusScope.of(context).nextFocus(),
-                      onSaved: (String? s) => item.name = (s ?? "").trim(),
-                      validator: (String? s) {
-                        if (s == null || s.isEmpty) {
-                          return AppLocalizations.of(context)!
-                              .itemNewDialogNameEmptyWarning;
-                        }
-                        return null;
-                      },
+                      onSaved: (String? s) => item.supplier = s?.trim(),
                     ),
-                    onFocusChange: (bool hasFocus) {
-                      if (!hasFocus) {
-                        nameKey.currentState?.validate();
-                      }
-                    },
-                  ),
-                  Focus(
-                    child: TextFormField(
-                      key: skuKey,
-                      initialValue: item.sku,
+                    TextFormField(
+                      initialValue: item.description,
                       decoration: InputDecoration(
-                        labelText:
-                            AppLocalizations.of(context)!.itemPropertySKU,
+                        labelText: AppLocalizations.of(context)!
+                            .itemPropertyDescription,
                       ),
-                      textInputAction: TextInputAction.next,
-                      onSaved: (String? s) => item.sku = (s ?? "").trim(),
-                      validator: (String? s) {
-                        if (s == null || s.isEmpty) {
-                          return AppLocalizations.of(context)!
-                              .itemNewDialogSKUEmptyWarning;
+                      textInputAction: TextInputAction.newline,
+                      textCapitalization: TextCapitalization.sentences,
+                      onSaved: (String? s) => item.description = s?.trim(),
+                      maxLines: null,
+                      onChanged: (String s) {
+                        //if last two lines are empty, close keyboard
+                        if (s.endsWith("\n\n")) {
+                          FocusScope.of(context).unfocus();
                         }
-                        return null;
                       },
                     ),
-                    onFocusChange: (bool hasFocus) {
-                      if (!hasFocus) {
-                        skuKey.currentState?.validate();
-                      }
-                    },
-                  ),
-                  TextFormField(
-                    initialValue: item.barcode,
-                    decoration: InputDecoration(
-                      labelText:
-                          AppLocalizations.of(context)!.itemPropertyBarcode,
-                    ),
-                    textInputAction: TextInputAction.next,
-                    onSaved: (String? s) => item.barcode = s?.trim(),
-                  ),
-                  TextFormField(
-                    initialValue: item.supplier,
-                    decoration: InputDecoration(
-                      labelText:
-                          AppLocalizations.of(context)!.itemPropertySupplier,
-                    ),
-                    textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.words,
-                    onSaved: (String? s) => item.supplier = s?.trim(),
-                  ),
-                  TextFormField(
-                    initialValue: item.description,
-                    decoration: InputDecoration(
-                      labelText:
-                          AppLocalizations.of(context)!.itemPropertyDescription,
-                    ),
-                    textInputAction: TextInputAction.newline,
-                    textCapitalization: TextCapitalization.sentences,
-                    onSaved: (String? s) => item.description = s?.trim(),
-                    maxLines: null,
-                    onChanged: (String s) {
-                      //if last two lines are empty, close keyboard
-                      if (s.endsWith("\n\n")) {
-                        FocusScope.of(context).unfocus();
-                      }
-                    },
-                  ),
-                  if (!isNew)
-                    TextButton(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.warning),
-                          Text(
-                              " ${AppLocalizations.of(context)!
-                                  .itemEditDialogDeleteItemButton}"),
-                        ],
+                    if (!isNew)
+                      TextButton(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.warning),
+                            Text(
+                                " ${AppLocalizations.of(context)!.itemEditDialogDeleteItemButton}"),
+                          ],
+                        ),
+                        onPressed: () {
+                          Item.deleteItemFromServer(item);
+                          item.toDelete = true;
+                          acceptReturn = true;
+                          Navigator.of(context).pop();
+                        },
                       ),
-                      onPressed: () {
-                        Item.deleteItemFromServer(item);
-                        item.toDelete = true;
-                        acceptReturn = true;
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

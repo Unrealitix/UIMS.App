@@ -196,6 +196,14 @@
 	"@itemNewDialogSKUEmptyWarning": {
 		"description": "The warning shown when the user tries to add a new item with an empty SKU"
 	},
+	"itemNewDialogQuantityEmptyWarning": "Quantity cannot be empty",
+	"@itemNewDialogQuantityEmptyWarning": {
+		"description": "The warning shown when the user tries to add a new item with an empty quantity"
+	},
+	"itemNewDialogQuantityInvalidWarning": "Invalid quantity",
+	"@itemNewDialogQuantityInvalidWarning": {
+		"description": "The warning shown when the user tries to add a new item with an invalid quantity"
+	},
 	"itemEditDialogDeleteItemButton": "Delete Item",
 	"@itemEditDialogDeleteItemButton": {
 		"description": "The label of the button to delete an item"

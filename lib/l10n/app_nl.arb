@@ -58,6 +58,8 @@
 	"itemEditDialogTitle": "Bewerk Item",
 	"itemNewDialogNameEmptyWarning": "Naam mag niet leeg zijn",
 	"itemNewDialogSKUEmptyWarning": "SKU mag niet leeg zijn",
+	"itemNewDialogQuantityEmptyWarning": "Aantal mag niet leeg zijn",
+	"itemNewDialogQuantityInvalidWarning": "Ongeldig aantal",
 	"itemEditDialogDeleteItemButton": "Verwijder Item",
 
 	"itemListSearchbarHint": "Zoeken",

@@ -346,7 +346,8 @@ class _InventoryState extends State<Inventory> {
       result = int.tryParse(controller.text);
       setDialogState(() {
         if (result == null || result! < 0) {
-          errorMessage = "Invalid quantity";
+          errorMessage =
+              AppLocalizations.of(context)!.itemNewDialogQuantityInvalidWarning;
         } else {
           errorMessage = null;
           Navigator.of(context).pop();
@@ -408,59 +409,65 @@ class _InventoryState extends State<Inventory> {
         const bold = TextStyle(fontWeight: FontWeight.bold);
         return AlertDialog(
           title: Text(item.name),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.itemPropertySKU,
-                  style: bold,
-                ),
-                Text(item.sku),
-                padding,
-                Text(
-                  AppLocalizations.of(context)!.itemPropertyQuantity,
-                  style: bold,
-                ),
-                Text(item.quantity.toString()),
-                padding,
-                if (item.barcode != null && item.barcode!.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.itemPropertyBarcode,
-                        style: bold,
-                      ),
-                      Text(item.barcode!),
-                    ],
+          content: RawScrollbar(
+            thickness: 2,
+            interactive: false,
+            thumbVisibility: true,
+            thumbColor: Colors.grey.withOpacity(0.5),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.itemPropertySKU,
+                    style: bold,
                   ),
-                padding,
-                if (item.supplier != null && item.supplier!.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.itemPropertySupplier,
-                        style: bold,
-                      ),
-                      Text(item.supplier!),
-                    ],
+                  Text(item.sku),
+                  padding,
+                  Text(
+                    AppLocalizations.of(context)!.itemPropertyQuantity,
+                    style: bold,
                   ),
-                padding,
-                if (item.description != null && item.description!.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.itemPropertyDescription,
-                        style: bold,
-                      ),
-                      Text(item.description!),
-                    ],
-                  ),
-              ],
+                  Text(item.quantity.toString()),
+                  padding,
+                  if (item.barcode != null && item.barcode!.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.itemPropertyBarcode,
+                          style: bold,
+                        ),
+                        Text(item.barcode!),
+                      ],
+                    ),
+                  padding,
+                  if (item.supplier != null && item.supplier!.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.itemPropertySupplier,
+                          style: bold,
+                        ),
+                        Text(item.supplier!),
+                      ],
+                    ),
+                  padding,
+                  if (item.description != null && item.description!.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.itemPropertyDescription,
+                          style: bold,
+                        ),
+                        Text(item.description!),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
           actions: [
