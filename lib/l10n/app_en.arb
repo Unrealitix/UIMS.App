@@ -89,22 +89,21 @@
 	},
 
 	"scanSwitchModeTooltip": "Switch Mode",
-	"@scanSwitchModeTooltip": {
-		"description": "The tooltip of the button to switch the scan mode"
-	},
-	"scanModeLabelNewItem": "New Item",
-	"@scanModeLabelNewItem": {
-		"description": "The label of the scan mode FAB option to scan a new item into the inventory"
-	},
-	"scanModeLabelAddition": "Addition",
-	"@scanModeLabelAddition": {
-		"description": "The label of the scan mode FAB option to add quantity to an existing item"
-	},
-	"scanModeLabelSubtraction": "Subtraction",
-	"@scanModeLabelSubtraction": {
-		"description": "The label of the scan mode FAB option to subtract quantity from an existing item"
-	},
-
+    "@scanSwitchModeTooltip": {
+    	"description": "The tooltip of the button to switch the scan mode"
+    },
+    "scanModeLabelNewItem": "Add new item to the inventory",
+    "@scanModeLabelNewItem": {
+   	"description": "The label of the scan mode FAB option to scan a new item into the inventory"
+    },
+    "scanModeLabelAddition": "Increase inventory quantity",
+    "@scanModeLabelAddition": {
+    	"description": "The label of the scan mode FAB option to add quantity to an existing item"
+    },
+    "scanModeLabelSubtraction": "Reduce inventory quantity",
+   	"@scanModeLabelSubtraction": {
+    	"description": "The label of the scan mode FAB option to subtract quantity from an existing item"
+    },
 
 	"inventoryListItemSubtitle": "SKU: {sku}",
 	"@inventoryListItemSubtitle": {
