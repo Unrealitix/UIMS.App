@@ -71,6 +71,12 @@ class _InventoryState extends State<Inventory> {
     const double topBarElevation = 2;
     const double roundedCorners = 4;
 
+    void searchItems(String s) {
+      items = Item.globalItems
+          .where((item) => item.name.toLowerCase().contains(s.toLowerCase()))
+          .toList();
+    }
+
     return Stack(
       children: [
         RefreshIndicator(
@@ -118,14 +124,16 @@ class _InventoryState extends State<Inventory> {
                                       icon: const Icon(Icons.close),
                                       onPressed: () {
                                         _searchController.clear();
+                                        searchItems("");
                                         FocusScope.of(context).unfocus();
                                       },
                                     )
                                   : null,
                             ),
                             onChanged: (String s) {
-                              setState(
-                                  () {}); //This is to update the suffix icon
+                              setState(() {
+                                searchItems(s);
+                              });
                             },
                           ),
                         ),
