@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:unrealitix_ims/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../main.dart';
 import '../models/inventory_item.dart';
 
 enum _SortBy {
@@ -55,7 +56,12 @@ class _InventoryState extends State<Inventory> {
       // Item(name: "Eggs", quantity: 1, sku: "no.3"),
     ];
 
-    _refreshList();
+    SharedPreferences.getInstance().then((SharedPreferences prefs) {
+      setState(() {
+        sortBy = _SortBy.values[prefs.getInt("sort_by") ?? 0];
+      });
+      _refreshList();
+    });
   }
 
   @override
@@ -481,6 +487,7 @@ class _InventoryState extends State<Inventory> {
                         sortBy = value!;
                         _sortItems();
                         Navigator.of(context).pop();
+                        _saveSortSettings();
                       },
                       contentPadding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
@@ -495,5 +502,10 @@ class _InventoryState extends State<Inventory> {
         );
       },
     );
+  }
+
+  Future<void> _saveSortSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("sort_by", sortBy.index);
   }
 }
