@@ -115,6 +115,7 @@ class Item {
                             AppLocalizations.of(context)!.itemPropertyName,
                       ),
                       textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.words,
                       onFieldSubmitted: (String s) =>
                           FocusScope.of(context).nextFocus(),
                       onSaved: (String? s) => item.name = (s ?? "").trim(),
@@ -172,6 +173,7 @@ class Item {
                           AppLocalizations.of(context)!.itemPropertySupplier,
                     ),
                     textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.words,
                     onSaved: (String? s) => item.supplier = s?.trim(),
                   ),
                   TextFormField(
@@ -181,6 +183,7 @@ class Item {
                           AppLocalizations.of(context)!.itemPropertyDescription,
                     ),
                     textInputAction: TextInputAction.newline,
+                    textCapitalization: TextCapitalization.sentences,
                     onSaved: (String? s) => item.description = s?.trim(),
                     maxLines: null,
                     onChanged: (String s) {
