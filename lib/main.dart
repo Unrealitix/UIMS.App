@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           side: const BorderSide(color: Colors.black26),
         ),
       ),
-      cardColor: blueColour, //colour for the Inventory tab top stuff
+      cardColor: mainColour, //colour for the Inventory tab top stuff
     );
 
     final materialDarkTheme = ThemeData.dark().copyWith(
