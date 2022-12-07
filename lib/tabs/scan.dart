@@ -216,8 +216,14 @@ class _ScanState extends State<Scan> {
                   }),
                 ),
                 SpeedDialChild(
-                  //TODO: make this a minus icon:
-                  child: const Icon(Icons.playlist_remove),
+                  child: Image.asset(
+                    "assets/icons/playlist_subtract4.png",
+                    width: 22,
+                    height: 22,
+                    filterQuality: FilterQuality.low,
+                    isAntiAlias: true,
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
                   label: AppLocalizations.of(context)!.scanModeLabelSubtraction,
                   onTap: () => setState(() {
                     scannerMode = _ScannerMode.subtraction;
