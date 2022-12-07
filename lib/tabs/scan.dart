@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:icon_decoration/icon_decoration.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -69,6 +70,17 @@ class _ScanState extends State<Scan> {
         return AppLocalizations.of(context)!.scanModeHintAddition;
       case _ScannerMode.subtraction:
         return AppLocalizations.of(context)!.scanModeHintSubtraction;
+    }
+  }
+
+  IconData get _scannerModeIcon {
+    switch (scannerMode) {
+      case _ScannerMode.newItem:
+        return Icons.edit;
+      case _ScannerMode.addition:
+        return Icons.add;
+      case _ScannerMode.subtraction:
+        return Icons.remove;
     }
   }
 
@@ -196,9 +208,6 @@ class _ScanState extends State<Scan> {
             alignment: Alignment.bottomRight,
             child: SpeedDial(
               tooltip: AppLocalizations.of(context)!.scanSwitchModeTooltip,
-              icon: Icons.party_mode,
-              //TODO: Put the current mode icon as a child, bottom right
-              activeIcon: Icons.close,
               spacing: 8,
               children: [
                 SpeedDialChild(
@@ -230,6 +239,26 @@ class _ScanState extends State<Scan> {
                   }),
                 ),
               ],
+              activeIcon: Icons.close,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(Icons.party_mode),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, top: 16),
+                    // alignment: Alignment.bottomLeft,
+                    child: DecoratedIcon(
+                      icon: Icon(_scannerModeIcon, size: 20),
+                      decoration: IconDecoration(
+                        border: IconBorder(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 4,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

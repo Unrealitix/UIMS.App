@@ -44,6 +44,7 @@ dependencies:
   audioplayers: ^1.1.1
   flutter_speed_dial: ^6.2.0
   shared_preferences: ^2.0.15
+  icon_decoration: ^1.0.1
 
 dev_dependencies:
   flutter_test:
