@@ -315,10 +315,12 @@ class _InventoryState extends State<Inventory> {
     setState(() {
       switch (sortBy) {
         case _SortBy.alphabeticalAscending:
-          items.sort((a, b) => a.name.compareTo(b.name));
+          items.sort(
+              (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
           break;
         case _SortBy.alphabeticalDescending:
-          items.sort((a, b) => b.name.compareTo(a.name));
+          items.sort(
+              (a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
           break;
         case _SortBy.quantityAscending:
           items.sort((a, b) => a.quantity.compareTo(b.quantity));
