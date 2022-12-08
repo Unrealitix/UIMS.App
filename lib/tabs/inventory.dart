@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unrealitix_ims/utils.dart';
 
 import '../main.dart';
 import '../models/inventory_item.dart';
@@ -165,6 +166,8 @@ class _InventoryState extends State<Inventory> {
                                 setState(() {
                                   filterOn = !filterOn;
                                 });
+                                showSnackbar(
+                                    "Filter function not yet implemented");
                               },
                             ),
                           ),
