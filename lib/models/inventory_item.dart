@@ -175,7 +175,7 @@ class Item {
                         initialValue: item.name,
                         decoration: InputDecoration(
                           labelText:
-                              AppLocalizations.of(context)!.itemPropertyName,
+                              "${AppLocalizations.of(context)!.itemPropertyName} ${AppLocalizations.of(context)!.itemPropertyRequired}",
                         ),
                         textInputAction: TextInputAction.next,
                         textCapitalization: TextCapitalization.words,
@@ -201,7 +201,7 @@ class Item {
                         initialValue: item.sku,
                         decoration: InputDecoration(
                           labelText:
-                              AppLocalizations.of(context)!.itemPropertySKU,
+                              "${AppLocalizations.of(context)!.itemPropertySKU} ${AppLocalizations.of(context)!.itemPropertyRequired}",
                         ),
                         textInputAction: TextInputAction.next,
                         onSaved: (String? s) => item.sku = (s ?? "").trim(),
@@ -225,8 +225,8 @@ class Item {
                         key: quantityVerificationKey,
                         initialValue: item.quantity.toString(),
                         decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!
-                              .itemPropertyQuantity,
+                          labelText:
+                              "${AppLocalizations.of(context)!.itemPropertyQuantity} ${AppLocalizations.of(context)!.itemPropertyRequired}",
                         ),
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
@@ -254,7 +254,7 @@ class Item {
                       initialValue: item.barcode,
                       decoration: InputDecoration(
                         labelText:
-                            AppLocalizations.of(context)!.itemPropertyBarcode,
+                            "${AppLocalizations.of(context)!.itemPropertyBarcode} ${AppLocalizations.of(context)!.itemPropertyOptional}",
                       ),
                       textInputAction: TextInputAction.next,
                       onSaved: (String? s) => item.barcode = s?.trim(),
@@ -263,7 +263,7 @@ class Item {
                       initialValue: item.supplier,
                       decoration: InputDecoration(
                         labelText:
-                            AppLocalizations.of(context)!.itemPropertySupplier,
+                            "${AppLocalizations.of(context)!.itemPropertySupplier} ${AppLocalizations.of(context)!.itemPropertyOptional}",
                       ),
                       textInputAction: TextInputAction.next,
                       textCapitalization: TextCapitalization.words,
@@ -272,8 +272,8 @@ class Item {
                     TextFormField(
                       initialValue: item.description,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!
-                            .itemPropertyDescription,
+                        labelText:
+                            "${AppLocalizations.of(context)!.itemPropertyDescription} ${AppLocalizations.of(context)!.itemPropertyOptional}",
                       ),
                       textInputAction: TextInputAction.newline,
                       textCapitalization: TextCapitalization.sentences,

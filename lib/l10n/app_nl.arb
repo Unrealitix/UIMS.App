@@ -53,6 +53,9 @@
 	"itemPropertySupplier": "Leverancier",
 	"itemPropertyDescription": "Beschrijving",
 
+	"itemPropertyRequired": "(vereist)",
+	"itemPropertyOptional": "(optioneel)",
+
 
 	"itemNewDialogTitle": "Nieuw Item",
 	"itemEditDialogTitle": "Bewerk Item",

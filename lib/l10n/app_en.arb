@@ -179,6 +179,15 @@
 		"description": "The label of the description property of an item"
 	},
 
+	"itemPropertyRequired": "(required)",
+	"@itemPropertyRequired": {
+		"description": "The label of the required property of an item"
+	},
+	"itemPropertyOptional": "(optional)",
+	"@itemPropertyOptional": {
+		"description": "The label of the optional property of an item"
+	},
+
 
 	"itemNewDialogTitle": "New Item",
 	"@itemNewDialogTitle": {
