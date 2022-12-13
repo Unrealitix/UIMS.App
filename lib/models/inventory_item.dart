@@ -80,6 +80,7 @@ class Item {
               thumbVisibility: true,
               thumbColor: Colors.grey.withOpacity(0.5),
               child: SingleChildScrollView(
+                controller: PrimaryScrollController.of(context),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -161,6 +162,7 @@ class Item {
             thumbVisibility: true,
             thumbColor: Colors.grey.withOpacity(0.5),
             child: SingleChildScrollView(
+              controller: PrimaryScrollController.of(context),
               child: Form(
                 key: formKey,
                 child: Column(

@@ -430,6 +430,7 @@ class _InventoryState extends State<Inventory> {
             thumbVisibility: true,
             thumbColor: Colors.grey.withOpacity(0.5),
             child: SingleChildScrollView(
+              controller: PrimaryScrollController.of(context),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
