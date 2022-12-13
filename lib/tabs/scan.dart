@@ -208,9 +208,12 @@ class _ScanState extends State<Scan> {
         ),
         Align(
           alignment: Alignment.topCenter,
-          child: Chip(
-            label: Text(_scannerModeString),
-            elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Chip(
+              label: Text(_scannerModeString),
+              elevation: 2,
+            ),
           ),
         ),
         Padding(
