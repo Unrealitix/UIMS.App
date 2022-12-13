@@ -47,6 +47,16 @@
 		"description": "The tooltip of the scan tab"
 	},
 
+	"tabScanCameraLoading": "Loading camera...",
+	"@tabScanCameraLoading": {
+		"description": "The message displayed while the camera is loading"
+	},
+
+	"tabScanCameraErrorPermission": "Camera permission denied",
+	"@tabScanCameraErrorPermission": {
+		"description": "The message displayed when the camera permission is denied"
+	},
+
 	"tabInventoryLabel": "Inventory",
 	"@tabInventoryLabel": {
 		"description": "The label of the inventory tab"

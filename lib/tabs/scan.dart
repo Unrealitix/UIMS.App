@@ -29,11 +29,6 @@ class _ScanState extends State<Scan> {
     torchEnabled: false,
     facing: CameraFacing.back,
     detectionSpeed: DetectionSpeed.noDuplicates,
-    onPermissionSet: (bool hasPermissions) {
-      debugPrint("ScanTab::onPermissionSet: $hasPermissions");
-      //TODO: This is being worked on and improved in the library.
-      // Waiting for the library to be updated.
-    },
   );
   bool hasTorch = false;
 
@@ -155,13 +150,57 @@ class _ScanState extends State<Scan> {
             isPopupCurrentlyOpen = false;
             _lastScannedCodeDelayedReset();
           },
-          onStart: (MobileScannerArguments? arguments) {
-            debugPrint("CameraComponent::onStart");
+          onScannerStarted: (MobileScannerArguments? arguments) {
+            debugPrint("CameraComponent::onScannerStarted");
             if (arguments == null) return;
             debugPrint("hasTorch: ${arguments.hasTorch}");
             setState(() {
               hasTorch = arguments.hasTorch;
             });
+          },
+          placeholderBuilder: (BuildContext context, Widget? w) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 10),
+                  Text(AppLocalizations.of(context)!.tabScanCameraLoading),
+                ],
+              ),
+            );
+          },
+          errorBuilder: (
+            BuildContext context,
+            MobileScannerException exception,
+            Widget? w,
+          ) {
+            String getErrorText() {
+              switch (exception.errorCode) {
+                case MobileScannerErrorCode.permissionDenied:
+                  return AppLocalizations.of(context)!
+                      .tabScanCameraErrorPermission;
+                case MobileScannerErrorCode.controllerUninitialized:
+                  return "Controller uninitialized. Report this error.";
+                case MobileScannerErrorCode.genericError:
+                  return "Generic error. Report this error.";
+              }
+            }
+
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error),
+                  const SizedBox(height: 10),
+                  Text(getErrorText()),
+                ],
+              ),
+            );
           },
         ),
         Align(

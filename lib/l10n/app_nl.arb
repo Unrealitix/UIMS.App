@@ -14,6 +14,9 @@
 	"tabScanLabel": "Scan",
 	"tabScanTooltip": "Scan nieuwe producten naar het inventaris",
 
+	"tabScanCameraLoading": "Camera laden...",
+	"tabScanCameraErrorPermission": "Camera toegang is geweigerd",
+
 	"tabInventoryLabel": "Inventaris",
 	"tabInventoryTooltip": "Bekijk en beheer uw inventaris",
 
