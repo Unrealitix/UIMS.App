@@ -28,17 +28,21 @@ class _TabbedViewState extends State<TabbedView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            const Image(
-              fit: BoxFit.cover,
-              image: ResizeImage(
-                AssetImage("assets/images/vanir_icon_2_fg6.png"),
-                width: 52,
+        title: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 56),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Image(
+                fit: BoxFit.fitHeight,
+                image: ResizeImage(
+                  AssetImage("assets/images/vanir_icon_2_fg6.png"),
+                  height: 56,
+                ),
               ),
-            ),
-            Text(AppLocalizations.of(context)!.appName),
-          ],
+              Text(AppLocalizations.of(context)!.appName),
+            ],
+          ),
         ),
       ),
       body: tabs[selectedIndex],
